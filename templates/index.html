@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="th" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORME | Fine Jewelry</title>
+    <meta name="description" content="FORME - เครื่องประดับเพชรแท้และอัญมณีดีไซน์เรียบหรูเหนือกาลเวลา มาตรฐานสากล GIA">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome 6 Free -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Minimal Style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#FAF9F6] text-neutral-900 min-h-screen selection:bg-neutral-900 selection:text-white">
+
+    <!-- Minimal Top Announcement Bar -->
+    <div class="bg-white border-b border-neutral-200/80 text-xs py-2 px-4 text-center text-neutral-600 font-light tracking-wide">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <span class="hidden md:inline text-[11px] uppercase tracking-widest text-neutral-400">
+                GIA Certified Natural Diamonds
+            </span>
+            <div class="flex-1 md:flex-none text-center">
+                จัดส่งฟรีทั่วประเทศเมื่อสั่งซื้อครบ 2,000.- | บริการสลักชื่อเลเซอร์ฟรี | โค้ดส่วนลด 10%: <strong class="text-neutral-900 cursor-pointer underline" onclick="navigator.clipboard.writeText('WELCOME10'); showToast('คัดลอกโค้ด WELCOME10 แล้ว', 'success');">WELCOME10</strong>
+            </div>
+            <span class="hidden md:inline text-[11px] text-neutral-500">
+                LINE: @forme.jewelry
+            </span>
+        </div>
+    </div>
+
+    <!-- Minimal Header -->
+    <header class="sticky top-0 z-40 minimal-nav transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo (Minimal Editorial) -->
+                <a href="/" class="flex flex-col items-start group">
+                    <span class="brand-title text-2xl sm:text-3xl font-light text-neutral-900 tracking-[0.28em] block leading-none">
+                        FORME
+                    </span>
+                    <span class="text-[9px] text-neutral-400 tracking-[0.3em] uppercase block mt-1 font-light">
+                        Fine Jewelry
+                    </span>
+                </a>
+
+                <!-- Desktop Search Bar (Minimal) -->
+                <div class="hidden lg:block flex-1 max-w-sm mx-10">
+                    <div class="relative">
+                        <input type="text" id="headerSearchInput" placeholder="ค้นหาเครื่องประดับ..." 
+                            class="w-full bg-white border border-neutral-200 rounded-full py-2 pl-9 pr-4 text-xs text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 transition">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- Navigation Actions -->
+                <div class="flex items-center gap-1 sm:gap-3 text-neutral-700">
+                    <!-- Order Tracking Button -->
+                    <button onclick="openOrderTrackingModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs hover:text-black hover:bg-neutral-100 transition" title="ติดตามพัสดุ">
+                        <i class="fa-solid fa-truck-fast text-xs"></i>
+                        <span class="font-light">ติดตามพัสดุ</span>
+                    </button>
+
+                    <!-- Wishlist Button -->
+                    <button onclick="openWishlistDrawer()" class="relative p-2.5 rounded-full hover:bg-neutral-100 transition" title="รายการโปรด">
+                        <i class="fa-regular fa-heart text-base"></i>
+                        <span class="wishlist-badge hidden absolute top-1 right-1 w-4 h-4 rounded-full bg-neutral-900 text-white text-[9px] font-medium flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Cart Button -->
+                    <button onclick="openCartDrawer()" class="relative p-2.5 rounded-full hover:bg-neutral-100 transition" title="ตระกร้าสินค้า">
+                        <i class="fa-solid fa-bag-shopping text-base"></i>
+                        <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 rounded-full bg-neutral-900 text-white text-[9px] font-medium flex items-center justify-center">0</span>
+                    </button>
+
+                    <!-- Admin Mode Toggle -->
+                    <button onclick="openAdminDashboard()" class="ml-1 px-3 py-1.5 rounded-full border border-neutral-300 text-neutral-700 hover:border-black hover:text-black text-xs font-light transition">
+                        <i class="fa-solid fa-gear text-xs mr-1"></i>
+                        <span class="hidden md:inline">จัดการร้าน</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="lg:hidden pb-3">
+                <div class="relative">
+                    <input type="text" oninput="handleSearch(this.value)" placeholder="ค้นหาเครื่องประดับ..." 
+                        class="w-full bg-white border border-neutral-200 rounded-full py-1.5 pl-9 pr-4 text-xs text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Minimal Hero Section -->
+    <section class="py-14 sm:py-20 border-b border-neutral-200/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+                
+                <!-- Text Content -->
+                <div class="lg:col-span-6 space-y-5 text-center lg:text-left">
+                    <span class="text-[11px] font-light tracking-[0.25em] text-neutral-500 uppercase block">
+                        Collection 2026
+                    </span>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl text-neutral-900 font-serif leading-[1.15]">
+                        ความประณีตที่เรียบง่าย <br>
+                        <span class="italic font-light">แต่ตราตรึงเหนือกาลเวลา</span>
+                    </h1>
+
+                    <p class="text-neutral-500 text-xs sm:text-sm max-w-md leading-relaxed mx-auto lg:mx-0 font-light">
+                        คัดสรรเพชรแท้ธรรมชาติ D Color น้ำ 100 และทองคำแท้ 18K ผ่านการรังสรรค์ด้วยความใส่ใจในทุกดีเทล เพื่อให้เป็นชิ้นงานที่สวมใส่ได้ในทุกๆ วัน
+                    </p>
+
+                    <!-- CTAs -->
+                    <div class="flex flex-wrap gap-3 justify-center lg:justify-start pt-2">
+                        <a href="#collectionSection" class="px-7 py-3 rounded-full bg-neutral-900 hover:bg-black text-white text-xs tracking-wider transition">
+                            สำรวจคอลเลกชัน
+                        </a>
+                        <button onclick="openSizeGuideModal()" class="px-6 py-3 rounded-full border border-neutral-300 hover:border-black text-neutral-800 text-xs tracking-wider transition">
+                            คู่มือวัดขนาดแหวน
+                        </button>
+                    </div>
+
+                    <!-- Minimal Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-6 border-t border-neutral-200/80 max-w-md mx-auto lg:mx-0 text-left">
+                        <div>
+                            <span class="block text-xl font-serif text-neutral-900">100%</span>
+                            <span class="text-[11px] text-neutral-400 font-light">GIA Certified</span>
+                        </div>
+                        <div>
+                            <span class="block text-xl font-serif text-neutral-900">18K</span>
+                            <span class="text-[11px] text-neutral-400 font-light">Solid Gold 750</span>
+                        </div>
+                        <div>
+                            <span class="block text-xl font-serif text-neutral-900">Lifetime</span>
+                            <span class="text-[11px] text-neutral-400 font-light">Jewelry Spa</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Jewelry Image Showcase -->
+                <div class="lg:col-span-6">
+                    <div class="relative max-w-md mx-auto">
+                        <div class="relative rounded-2xl overflow-hidden bg-neutral-100 border border-neutral-200/80 aspect-[4/5] group">
+                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80" 
+                                alt="FORME Masterpiece" 
+                                class="w-full h-full object-cover group-hover:scale-102 transition duration-700">
+                            
+                            <!-- Minimal Floating Tag -->
+                            <div class="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-white/95 backdrop-blur-sm border border-neutral-200/80 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-neutral-400 uppercase tracking-widest block">Signature</span>
+                                    <h4 class="text-xs font-medium text-neutral-900">แหวนเพชรแท้ Solitaire 18K</h4>
+                                </div>
+                                <button onclick="openProductModal(1)" class="text-xs px-3.5 py-1.5 rounded-full bg-neutral-900 text-white font-light hover:bg-black transition">
+                                    ฿35,900
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Trust Bar -->
+    <section class="py-8 bg-white border-b border-neutral-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                
+                <div class="space-y-1">
+                    <span class="text-xs font-medium text-neutral-900 block">เพชรแท้มาตรฐาน GIA</span>
+                    <span class="text-[11px] text-neutral-400 font-light block">น้ำ 100 คัดพิเศษพร้อมใบรับรอง</span>
+                </div>
+
+                <div class="space-y-1">
+                    <span class="text-xs font-medium text-neutral-900 block">จัดส่งฟรีพร้อมประกันภัย</span>
+                    <span class="text-[11px] text-neutral-400 font-light block">คุ้มครองสินค้าเต็มวงเงิน</span>
+                </div>
+
+                <div class="space-y-1">
+                    <span class="text-xs font-medium text-neutral-900 block">สลักชื่อเลเซอร์ฟรี</span>
+                    <span class="text-[11px] text-neutral-400 font-light block">ข้อความหรือวันที่สำคัญ</span>
+                </div>
+
+                <div class="space-y-1">
+                    <span class="text-xs font-medium text-neutral-900 block">ดูแลสปาฟรีตลอดชีพ</span>
+                    <span class="text-[11px] text-neutral-400 font-light block">ทำความสะอาดและปรับขนาดแหวน</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Catalog Section -->
+    <main id="collectionSection" class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Category Filter Tabs (Minimal Underline) -->
+        <div class="flex items-center justify-center gap-6 sm:gap-10 border-b border-neutral-200 mb-8 overflow-x-auto">
+            <button onclick="setCategory('all', this)" class="cat-tab active">
+                ทั้งหมด
+            </button>
+            <button onclick="setCategory('rings', this)" class="cat-tab">
+                แหวน
+            </button>
+            <button onclick="setCategory('necklaces', this)" class="cat-tab">
+                สร้อยคอ & จี้
+            </button>
+            <button onclick="setCategory('earrings', this)" class="cat-tab">
+                ต่างหู
+            </button>
+            <button onclick="setCategory('bracelets', this)" class="cat-tab">
+                กำไล & สร้อยข้อมือ
+            </button>
+            <button onclick="setCategory('bridal', this)" class="cat-tab">
+                เซ็ตวิวาห์
+            </button>
+        </div>
+
+        <!-- Filter Controls Bar (Minimal) -->
+        <div class="py-3 mb-6 flex flex-wrap items-center justify-between gap-4 text-xs text-neutral-600">
+            
+            <!-- Left Filters -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 flex-1">
+                <select onchange="handleMaterialFilter(this.value)" class="bg-white border border-neutral-200 rounded-md px-3 py-1.5 text-xs text-neutral-800 focus:outline-none focus:border-neutral-900">
+                    <option value="all">ตัวเรือน: ทั้งหมด</option>
+                    <option value="ทองคำขาว 18K">ทองคำขาว 18K</option>
+                    <option value="ทองคำแท้ 18K">ทองคำแท้ 18K</option>
+                    <option value="พิงก์โกลด์ 18K">พิงก์โกลด์ 18K</option>
+                    <option value="เงินแท้ 925">เงินแท้ 925</option>
+                </select>
+
+                <select onchange="handleGemstoneFilter(this.value)" class="bg-white border border-neutral-200 rounded-md px-3 py-1.5 text-xs text-neutral-800 focus:outline-none focus:border-neutral-900">
+                    <option value="all">อัญมณี: ทั้งหมด</option>
+                    <option value="เพชร">เพชรแท้ (Diamond)</option>
+                    <option value="ทับทิม">ทับทิม (Ruby)</option>
+                    <option value="ไพลิน">ไพลิน (Sapphire)</option>
+                    <option value="มรกต">มรกต (Emerald)</option>
+                    <option value="ไข่มุก">ไข่มุก (Pearl)</option>
+                </select>
+
+                <button onclick="resetFilters()" class="text-xs text-neutral-400 hover:text-neutral-900 ml-1">
+                    ล้างตัวกรอง
+                </button>
+            </div>
+
+            <!-- Right Sort & Count -->
+            <div class="flex items-center gap-3">
+                <span id="productsCount" class="text-xs text-neutral-400 font-light">กำลังโหลด...</span>
+                <select id="sortSelect" onchange="handleSort(this.value)" class="bg-white border border-neutral-200 rounded-md px-3 py-1.5 text-xs text-neutral-800 focus:outline-none focus:border-neutral-900">
+                    <option value="default">เรียงลำดับ: แนะนำ</option>
+                    <option value="price_asc">ราคา: ต่ำไปสูง</option>
+                    <option value="price_desc">ราคา: สูงไปต่ำ</option>
+                    <option value="rating">คะแนนรีวิวสูงสุด</option>
+                    <option value="newest">สินค้ามาใหม่</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Grid Container -->
+        <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Rendered by app.js -->
+        </div>
+
+    </main>
+
+    <!-- Minimal Bespoke Banner -->
+    <section class="py-14 bg-white border-t border-b border-neutral-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div class="space-y-4">
+                    <span class="text-[11px] font-light text-neutral-400 tracking-[0.2em] uppercase">Bespoke Service</span>
+                    <h2 class="text-3xl font-serif text-neutral-900 leading-snug">
+                        บริการสั่งทำพิเศษตามงบประมาณ
+                    </h2>
+                    <p class="text-xs text-neutral-500 leading-relaxed font-light">
+                        ออกแบบและคัดสรรเพชรแท้เม็ดเดี่ยว GIA ตามความต้องการ สำหรับแหวนหมั้น แหวนแต่งงาน หรือโอกาสพิเศษ โดยทีมผู้เชี่ยวชาญของ FORME
+                    </p>
+                    <div class="pt-2">
+                        <a href="https://line.me" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-neutral-900 hover:bg-neutral-900 hover:text-white text-neutral-900 text-xs transition">
+                            <i class="fa-brands fa-line text-sm"></i> ติดต่อผู้เชี่ยวชาญทาง LINE
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs text-neutral-600">
+                    <div class="p-4 rounded-lg bg-neutral-50 border border-neutral-200/60">
+                        <h4 class="font-medium text-neutral-900 mb-1">3D CAD Modeling</h4>
+                        <p class="text-[11px] text-neutral-400">เห็นภาพแหวนจริงรอบทิศทางก่อนผลิต</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-neutral-50 border border-neutral-200/60">
+                        <h4 class="font-medium text-neutral-900 mb-1">Laser Inscription</h4>
+                        <p class="text-[11px] text-neutral-400">ตรวจสอบเลข GIA ตรงกับใบเซอร์</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-neutral-50 border border-neutral-200/60">
+                        <h4 class="font-medium text-neutral-900 mb-1">Solid 18K Gold</h4>
+                        <p class="text-[11px] text-neutral-400">เลือกทองคำขาว, ทองคำแท้, หรือโรสโกลด์</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-neutral-50 border border-neutral-200/60">
+                        <h4 class="font-medium text-neutral-900 mb-1">Gift Packaging</h4>
+                        <p class="text-[11px] text-neutral-400">กล่องหนังมินิมอลพร้อมผ้าเช็ดพิเศษ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Customer Testimonials -->
+    <section class="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-md mx-auto mb-10">
+            <span class="text-[11px] font-light text-neutral-400 tracking-[0.2em] uppercase">Testimonials</span>
+            <h2 class="text-2xl font-serif text-neutral-900 mt-1">ความประทับใจจากลูกค้า</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-neutral-600">
+            <div class="p-5 rounded-xl bg-white border border-neutral-200/80 space-y-3">
+                <p class="leading-relaxed font-light italic">
+                    "แหวนหมั้น Solitaire 18K ประกายเพชรสวยงามมาก บริการสลักชื่อเลเซอร์คมชัด แพ็กเกจเรียบหรูประทับใจมากครับ"
+                </p>
+                <div class="pt-2 border-t border-neutral-100 flex items-center justify-between">
+                    <span class="font-medium text-neutral-900">คุณธนภัทร ส.</span>
+                    <span class="text-[10px] text-neutral-400">Solitaire 18K</span>
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl bg-white border border-neutral-200/80 space-y-3">
+                <p class="leading-relaxed font-light italic">
+                    "สร้อยข้อมือ Tennis งานประณีตเรียบหรู เพชรคัดขนาดเท่ากันสม่ำเสมอ ตัวล็อกแน่นหนาใส่ติดข้อมือได้ทุกวันค่ะ"
+                </p>
+                <div class="pt-2 border-t border-neutral-100 flex items-center justify-between">
+                    <span class="font-medium text-neutral-900">คุณพลอยไพลิน ว.</span>
+                    <span class="text-[10px] text-neutral-400">Tennis Bracelet</span>
+                </div>
+            </div>
+
+            <div class="p-5 rounded-xl bg-white border border-neutral-200/80 space-y-3">
+                <p class="leading-relaxed font-light italic">
+                    "จี้มรกตล้อมเพชร สีเขียวสดใส สวยคลาสสิก มีใบรับรองชัดเจน จัดส่งรวดเร็วและปลอดภัยมากครับ"
+                </p>
+                <div class="pt-2 border-t border-neutral-100 flex items-center justify-between">
+                    <span class="font-medium text-neutral-900">คุณวรินทร จ.</span>
+                    <span class="text-[10px] text-neutral-400">Emerald Pendant</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimal Footer -->
+    <footer class="bg-white border-t border-neutral-200 pt-12 pb-10 text-neutral-500 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                
+                <!-- Brand Info -->
+                <div class="space-y-3">
+                    <span class="brand-title text-xl font-light text-neutral-900 tracking-[0.25em] block">
+                        FORME
+                    </span>
+                    <p class="text-[11px] text-neutral-400 leading-relaxed font-light">
+                        เครื่องประดับเพชรแท้และอัญมณีล้ำค่า ออกแบบด้วยความเรียบง่าย ประณีต และเหนือกาลเวลา
+                    </p>
+                </div>
+
+                <!-- Boutique -->
+                <div>
+                    <h4 class="text-neutral-900 font-medium mb-3 uppercase tracking-wider text-[11px]">สาขาหน้าร้าน</h4>
+                    <p class="text-neutral-600 font-light">สยามพารากอน ชั้น M</p>
+                    <p class="text-neutral-400 text-[11px] font-light">โทร: 02-123-4567</p>
+                    <p class="text-neutral-600 font-light mt-2">เอ็มควอเทียร์ ชั้น G</p>
+                    <p class="text-neutral-400 text-[11px] font-light">โทร: 02-987-6543</p>
+                </div>
+
+                <!-- Customer Service -->
+                <div>
+                    <h4 class="text-neutral-900 font-medium mb-3 uppercase tracking-wider text-[11px]">บริการลูกค้า</h4>
+                    <ul class="space-y-1.5 font-light">
+                        <li><button onclick="openOrderTrackingModal()" class="hover:text-black transition">ติดตามสถานะคำสั่งซื้อ</button></li>
+                        <li><button onclick="openSizeGuideModal()" class="hover:text-black transition">ตารางวัดขนาดแหวน</button></li>
+                        <li><a href="#collectionSection" class="hover:text-black transition">นโยบายการรับประกัน</a></li>
+                        <li><a href="#collectionSection" class="hover:text-black transition">การจัดส่งและการคืนสินค้า</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-neutral-900 font-medium mb-3 uppercase tracking-wider text-[11px]">ติดต่อเรา</h4>
+                    <ul class="space-y-1.5 font-light">
+                        <li>โทร: 02-888-9999</li>
+                        <li>LINE: @forme.jewelry</li>
+                        <li>Email: care@forme-jewelry.com</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright & Payments -->
+            <div class="pt-6 border-t border-neutral-100 flex flex-col md:flex-row justify-between items-center gap-3 text-[11px] text-neutral-400 font-light">
+                <p>© 2026 FORME FINE JEWELRY. All rights reserved.</p>
+                <div class="flex items-center gap-3">
+                    <span>PromptPay</span>
+                    <span>•</span>
+                    <span>Visa</span>
+                    <span>•</span>
+                    <span>Mastercard</span>
+                    <span>•</span>
+                    <span>ผ่อนชำระ 0% 10 เดือน</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODALS & DRAWERS (MINIMAL) ==================== -->
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto" role="dialog" aria-modal="true">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div onclick="closeProductModal()" class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-4xl w-full my-8 text-left shadow-xl overflow-hidden z-10">
+                <button onclick="closeProductModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black text-sm">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+
+                <div id="productModalContent">
+                    <!-- Populated by app.js -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Drawer (Minimal) -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="closeCartDrawer()" class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white border-l border-neutral-200 shadow-xl flex flex-col justify-between z-10">
+            
+            <!-- Drawer Header -->
+            <div class="p-5 border-b border-neutral-100 flex items-center justify-between">
+                <h3 class="font-medium text-neutral-900 text-sm tracking-wider uppercase">ตระกร้าสินค้า</h3>
+                <button onclick="closeCartDrawer()" class="text-neutral-400 hover:text-black text-sm">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <!-- Free Shipping Progress -->
+            <div class="px-5 py-2.5 bg-neutral-50 border-b border-neutral-100 text-xs text-neutral-600">
+                <div class="flex justify-between items-center mb-1 text-[11px]" id="freeShippingText">
+                    <span>ซื้อครบ 2,000.- ส่งฟรีทั่วประเทศ</span>
+                </div>
+                <div class="w-full bg-neutral-200 rounded-full h-1 overflow-hidden">
+                    <div id="freeShippingProgress" class="bg-neutral-900 h-1 rounded-full transition-all duration-300" style="width: 50%"></div>
+                </div>
+            </div>
+
+            <!-- Cart Items -->
+            <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-3">
+                <!-- Populated by app.js -->
+            </div>
+
+            <!-- Drawer Footer -->
+            <div class="p-5 border-t border-neutral-100 bg-white space-y-3">
+                
+                <!-- Coupon Input -->
+                <div class="flex gap-2">
+                    <input type="text" id="couponInput" placeholder="โค้ดส่วนลด (WELCOME10)" 
+                        class="flex-1 bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-1.5 text-xs text-neutral-900 uppercase focus:outline-none focus:border-neutral-900">
+                    <button onclick="applyCoupon()" class="px-3.5 py-1.5 rounded-lg border border-neutral-300 text-neutral-800 hover:border-black text-xs transition">
+                        ใช้โค้ด
+                    </button>
+                </div>
+                <div id="activeCouponTag" class="hidden"></div>
+
+                <!-- Price Breakdown -->
+                <div class="space-y-1 text-xs text-neutral-500 font-light">
+                    <div class="flex justify-between">
+                        <span>ยอดรวม</span>
+                        <span id="cartSubtotal" class="text-neutral-900 font-medium">฿0</span>
+                    </div>
+                    <div class="flex justify-between text-neutral-900">
+                        <span>ส่วนลด</span>
+                        <span id="cartDiscount">-฿0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>ค่าจัดส่ง</span>
+                        <span id="cartShipping" class="text-neutral-900">ฟรี</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-medium text-neutral-900 pt-2 border-t border-neutral-100">
+                        <span>ยอดสุทธิ</span>
+                        <span id="cartTotal" class="font-serif-luxury font-semibold text-base">฿0</span>
+                    </div>
+                </div>
+
+                <!-- Checkout Button -->
+                <button onclick="openCheckoutModal()" class="w-full py-3 rounded-full bg-neutral-900 hover:bg-black text-white text-xs tracking-wider transition">
+                    ดำเนินการชำระเงิน
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Wishlist Drawer (Minimal) -->
+    <div id="wishlistDrawer" class="fixed inset-0 z-50 hidden">
+        <div onclick="closeWishlistDrawer()" class="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div class="absolute inset-y-0 right-0 max-w-md w-full bg-white border-l border-neutral-200 shadow-xl flex flex-col justify-between z-10">
+            
+            <div class="p-5 border-b border-neutral-100 flex items-center justify-between">
+                <h3 class="font-medium text-neutral-900 text-sm tracking-wider uppercase">รายการโปรด</h3>
+                <button onclick="closeWishlistDrawer()" class="text-neutral-400 hover:text-black text-sm">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+            </div>
+
+            <div id="wishlistItemsContainer" class="flex-1 overflow-y-auto p-5 space-y-3">
+                <!-- Populated by app.js -->
+            </div>
+
+            <div class="p-5 border-t border-neutral-100">
+                <button onclick="closeWishlistDrawer()" class="w-full py-2.5 rounded-full border border-neutral-300 text-neutral-800 hover:border-black text-xs transition">
+                    ดูสินค้าต่อ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal (Minimal) -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div onclick="closeCheckoutModal()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-3xl w-full my-8 text-left shadow-xl z-10">
+                <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+
+                <h2 class="text-2xl font-serif text-neutral-900 mb-1">ชำระเงิน & จัดส่ง</h2>
+                <p class="text-xs text-neutral-500 mb-5 font-light">กรอกที่อยู่จัดส่งและเลือกวิธีการชำระเงิน</p>
+
+                <form onsubmit="processOrderSubmit(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Left: Customer Information -->
+                        <div class="space-y-3 text-xs">
+                            <h4 class="font-medium text-neutral-900 uppercase tracking-wider text-[11px]">1. ข้อมูลผู้สั่งซื้อ</h4>
+                            
+                            <div>
+                                <label class="block text-neutral-600 mb-1 font-light">ชื่อ-นามสกุล *</label>
+                                <input type="text" id="orderCustName" required placeholder="ชื่อ-นามสกุล ผู้รับ" 
+                                    class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-neutral-600 mb-1 font-light">เบอร์โทรศัพท์ *</label>
+                                    <input type="tel" id="orderCustPhone" required placeholder="081-234-5678" 
+                                        class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                                </div>
+                                <div>
+                                    <label class="block text-neutral-600 mb-1 font-light">อีเมล</label>
+                                    <input type="email" id="orderCustEmail" placeholder="your@email.com" 
+                                        class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-neutral-600 mb-1 font-light">ที่อยู่จัดส่ง *</label>
+                                <textarea id="orderCustAddress" required rows="2" placeholder="บ้านเลขที่, ซอย, ถนน, เขต/อำเภอ" 
+                                    class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-1.5 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-neutral-600 mb-1 font-light">จังหวัด *</label>
+                                    <input type="text" id="orderCustProvince" required placeholder="กรุงเทพมหานคร" 
+                                        class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                                </div>
+                                <div>
+                                    <label class="block text-neutral-600 mb-1 font-light">รหัสไปรษณีย์ *</label>
+                                    <input type="text" id="orderCustPostal" required placeholder="10110" 
+                                        class="w-full bg-neutral-50 border border-neutral-200 rounded-md px-3 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-lg bg-neutral-50 border border-neutral-200/80">
+                                <label class="flex items-center gap-2 cursor-pointer text-xs text-neutral-700">
+                                    <input type="checkbox" id="orderGiftWrap" class="rounded text-neutral-900 focus:ring-0">
+                                    <span class="font-medium">ห่อกล่องของขวัญและแนบการ์ดอวยพร (ฟรี)</span>
+                                </label>
+                                <input type="text" id="orderGiftMsg" placeholder="ข้อความบนการ์ดอวยพร (ถ้ามี)" 
+                                    class="mt-2 w-full bg-white border border-neutral-200 rounded-md px-2.5 py-1 text-xs text-neutral-800">
+                            </div>
+                        </div>
+
+                        <!-- Right: Payment & Summary -->
+                        <div class="space-y-3 text-xs">
+                            <h4 class="font-medium text-neutral-900 uppercase tracking-wider text-[11px]">2. วิธีการชำระเงิน</h4>
+
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <label class="payment-tab p-2.5 rounded-lg border border-neutral-900 bg-neutral-100 cursor-pointer flex items-center gap-1.5" id="payTab_promptpay" onclick="setPaymentMethod('promptpay')">
+                                    <input type="radio" name="payment_method_choice" value="promptpay" checked class="text-neutral-900">
+                                    <span class="font-medium">PromptPay QR</span>
+                                </label>
+                                <label class="payment-tab p-2.5 rounded-lg border border-neutral-200 cursor-pointer flex items-center gap-1.5" id="payTab_card" onclick="setPaymentMethod('card')">
+                                    <input type="radio" name="payment_method_choice" value="card" class="text-neutral-900">
+                                    <span class="font-medium">บัตรเครดิต</span>
+                                </label>
+                                <label class="payment-tab p-2.5 rounded-lg border border-neutral-200 cursor-pointer flex items-center gap-1.5" id="payTab_installment" onclick="setPaymentMethod('installment')">
+                                    <input type="radio" name="payment_method_choice" value="installment" class="text-neutral-900">
+                                    <span class="font-medium">ผ่อน 0% 10 ด.</span>
+                                </label>
+                                <label class="payment-tab p-2.5 rounded-lg border border-neutral-200 cursor-pointer flex items-center gap-1.5" id="payTab_cod" onclick="setPaymentMethod('cod')">
+                                    <input type="radio" name="payment_method_choice" value="cod" class="text-neutral-900">
+                                    <span class="font-medium">เก็บเงินปลายทาง</span>
+                                </label>
+                            </div>
+
+                            <!-- Payment Panels -->
+                            <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200 min-h-[140px] flex items-center justify-center text-center">
+                                <div id="payPanel_promptpay" class="payment-panel w-full space-y-2">
+                                    <div class="qr-container mx-auto">
+                                        <svg width="120" height="120" viewBox="0 0 100 100" class="mx-auto">
+                                            <rect width="100" height="100" fill="white" />
+                                            <rect x="5" y="5" width="28" height="28" fill="#18181B" />
+                                            <rect x="9" y="9" width="20" height="20" fill="white" />
+                                            <rect x="13" y="13" width="12" height="12" fill="#18181B" />
+                                            <rect x="67" y="5" width="28" height="28" fill="#18181B" />
+                                            <rect x="71" y="9" width="20" height="20" fill="white" />
+                                            <rect x="75" y="13" width="12" height="12" fill="#18181B" />
+                                            <rect x="5" y="67" width="28" height="28" fill="#18181B" />
+                                            <rect x="9" y="71" width="20" height="20" fill="white" />
+                                            <rect x="13" y="75" width="12" height="12" fill="#18181B" />
+                                            <rect x="38" y="10" width="8" height="8" fill="#18181B" />
+                                            <rect x="50" y="15" width="6" height="6" fill="#18181B" />
+                                            <rect x="38" y="25" width="12" height="6" fill="#18181B" />
+                                            <rect x="10" y="38" width="14" height="6" fill="#18181B" />
+                                            <rect x="30" y="42" width="40" height="16" fill="#18181B" />
+                                            <rect x="75" y="40" width="15" height="8" fill="#18181B" />
+                                            <rect x="42" y="65" width="18" height="8" fill="#18181B" />
+                                            <rect x="68" y="65" width="24" height="24" fill="#18181B" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-xs font-semibold text-neutral-900 font-serif-luxury" id="promptpayAmount">฿0</p>
+                                    <p class="text-[10px] text-neutral-500">บัญชี: บริษัท ฟอร์ม จิวเวลรี่ จำกัด (FORME JEWELRY CO., LTD.)</p>
+                                </div>
+
+                                <div id="payPanel_card" class="payment-panel hidden w-full text-left space-y-2">
+                                    <input type="text" placeholder="หมายเลขบัตร 16 หลัก" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1.5 text-xs text-neutral-900">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <input type="text" placeholder="MM/YY" class="bg-white border border-neutral-300 rounded px-2.5 py-1.5 text-xs text-neutral-900">
+                                        <input type="password" placeholder="CVV" maxlength="3" class="bg-white border border-neutral-300 rounded px-2.5 py-1.5 text-xs text-neutral-900">
+                                    </div>
+                                </div>
+
+                                <div id="payPanel_installment" class="payment-panel hidden w-full text-left text-xs space-y-1 text-neutral-600 font-light">
+                                    <p>ผ่อนชำระ 0% 10 เดือนผ่านบัตรที่ร่วมรายการ:</p>
+                                    <p class="font-medium text-neutral-900">KBank, SCB, KTC, BBL</p>
+                                </div>
+
+                                <div id="payPanel_cod" class="payment-panel hidden w-full text-center text-xs space-y-1">
+                                    <p class="font-medium text-neutral-900">เก็บเงินปลายทาง (COD)</p>
+                                    <p class="text-[11px] text-neutral-400">ชำระเงินเมื่อได้รับพัสดุ</p>
+                                </div>
+                            </div>
+
+                            <div id="checkoutItemsList" class="max-h-24 overflow-y-auto pr-1"></div>
+
+                            <div class="p-3 rounded-lg bg-neutral-50 border border-neutral-200/80 text-xs space-y-1 text-neutral-600 font-light">
+                                <div class="flex justify-between">
+                                    <span>ยอดรวม</span>
+                                    <span id="checkoutSubtotal" class="text-neutral-900">฿0</span>
+                                </div>
+                                <div class="flex justify-between text-neutral-900">
+                                    <span>ส่วนลด</span>
+                                    <span id="checkoutDiscount">-฿0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>ค่าจัดส่ง</span>
+                                    <span id="checkoutShipping" class="text-neutral-900">ฟรี</span>
+                                </div>
+                                <div class="flex justify-between font-medium text-neutral-900 pt-1.5 border-t border-neutral-200 text-sm">
+                                    <span>ยอดสุทธิ</span>
+                                    <span id="checkoutTotal" class="font-serif-luxury font-semibold">฿0</span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-2.5 rounded-full bg-neutral-900 hover:bg-black text-white text-xs tracking-wider transition">
+                                ยืนยันการสั่งซื้อ
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal (Minimal) -->
+    <div id="orderSuccessModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-md w-full my-8 text-center shadow-xl z-10" id="receiptPrintArea">
+                <div class="w-12 h-12 rounded-full bg-neutral-100 text-neutral-900 flex items-center justify-center text-lg mx-auto mb-3">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <span class="text-[10px] text-neutral-400 font-light uppercase tracking-widest">Order Confirmed</span>
+                <h2 class="text-2xl font-serif text-neutral-900 mt-1">ขอบคุณสำหรับการสั่งซื้อ</h2>
+                <p class="text-xs text-neutral-500 mt-1 mb-5 font-light">เราได้รับคำสั่งซื้อและกำลังเตรียมจัดส่งอย่างประณีต</p>
+
+                <div class="p-4 rounded-xl bg-neutral-50 border border-neutral-200 text-left text-xs space-y-2 mb-5 font-light text-neutral-700">
+                    <div class="flex justify-between border-b border-neutral-200/60 pb-1.5">
+                        <span class="text-neutral-500">หมายเลขคำสั่งซื้อ:</span>
+                        <strong class="text-neutral-900 font-mono" id="successOrderNumber">FRM-XXXXXXXX</strong>
+                    </div>
+                    <div class="flex justify-between border-b border-neutral-200/60 pb-1.5">
+                        <span class="text-neutral-500">เลขพัสดุ:</span>
+                        <strong class="text-neutral-900 font-mono" id="successTrackingNumber">THPXXXXXXXXTH</strong>
+                    </div>
+                    <div class="flex justify-between border-b border-neutral-200/60 pb-1.5">
+                        <span class="text-neutral-500">ผู้รับ:</span>
+                        <span class="text-neutral-900" id="successCustName">-</span>
+                    </div>
+                    <div class="border-b border-neutral-200/60 pb-1.5">
+                        <span class="text-neutral-500 block">ที่อยู่จัดส่ง:</span>
+                        <span class="text-neutral-900" id="successCustAddress">-</span>
+                    </div>
+                    <div class="flex justify-between font-medium pt-1 text-sm text-neutral-900">
+                        <span>ยอดชำระสุทธิ:</span>
+                        <span class="font-serif-luxury font-semibold" id="successTotalAmount">฿0</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="flex-1 py-2 rounded-full border border-neutral-300 text-neutral-800 text-xs hover:border-black transition">
+                        พิมพ์ใบเสร็จ
+                    </button>
+                    <button onclick="closeOrderSuccessModal()" class="flex-1 py-2 rounded-full bg-neutral-900 text-white text-xs hover:bg-black transition">
+                        เสร็จสิ้น
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal (Minimal) -->
+    <div id="orderTrackingModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div onclick="closeOrderTrackingModal()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-lg w-full my-8 text-left shadow-xl z-10">
+                <button onclick="closeOrderTrackingModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+
+                <h3 class="text-xl font-serif text-neutral-900 mb-1">ติดตามสถานะคำสั่งซื้อ</h3>
+                <p class="text-xs text-neutral-500 mb-4 font-light">ค้นหาด้วยหมายเลขคำสั่งซื้อ (เช่น FRM-2026...) หรือเบอร์โทรศัพท์</p>
+
+                <div class="flex gap-2">
+                    <input type="text" id="trackOrderInput" placeholder="หมายเลขคำสั่งซื้อ หรือ เบอร์โทรศัพท์" 
+                        class="flex-1 bg-neutral-50 border border-neutral-200 rounded-lg px-3.5 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
+                    <button onclick="trackOrderModal()" class="px-5 py-2 rounded-lg bg-neutral-900 text-white text-xs hover:bg-black transition">
+                        ค้นหา
+                    </button>
+                </div>
+
+                <div id="trackingResultContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ring Size Guide Modal (Minimal) -->
+    <div id="sizeGuideModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div onclick="closeSizeGuideModal()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-xl w-full my-8 text-left shadow-xl z-10">
+                <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
+
+                <h3 class="text-xl font-serif text-neutral-900 mb-1">คู่มือวัดขนาดแหวน</h3>
+                <p class="text-xs text-neutral-500 mb-5 font-light">ตารางเทียบขนาดแหวนมาตรฐานสากล</p>
+
+                <div class="grid grid-cols-2 gap-3 mb-5 text-xs text-neutral-600 font-light">
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200/80">
+                        <h4 class="font-medium text-neutral-900 mb-1">วิธีที่ 1: วัดจากแหวนเดิม</h4>
+                        <p class="text-neutral-500 text-[11px]">วัดเส้นผ่านศูนย์กลางภายในแหวน (mm)</p>
+                    </div>
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200/80">
+                        <h4 class="font-medium text-neutral-900 mb-1">วิธีที่ 2: ใช้แถบกระดาษ</h4>
+                        <p class="text-neutral-500 text-[11px]">พันรอบโคนนิ้วแล้ววัดความยาว (mm)</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg border border-neutral-200">
+                    <table class="w-full text-xs text-center text-neutral-600">
+                        <thead class="bg-neutral-50 text-neutral-900 font-medium border-b border-neutral-200">
+                            <tr>
+                                <th class="py-2 px-3">ไซส์ไทย / ญี่ปุ่น</th>
+                                <th class="py-2 px-3">เส้นรอบวง (mm)</th>
+                                <th class="py-2 px-3">เส้นผ่านศูนย์กลาง (mm)</th>
+                                <th class="py-2 px-3">ไซส์ US</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-neutral-100">
+                            <tr><td class="py-1.5 font-medium text-neutral-900">48</td><td>48.0 mm</td><td>15.3 mm</td><td>4.5</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">50</td><td>50.0 mm</td><td>15.9 mm</td><td>5.25</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">52</td><td>52.0 mm</td><td>16.5 mm</td><td>6.0</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">54</td><td>54.0 mm</td><td>17.2 mm</td><td>6.75</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">56</td><td>56.0 mm</td><td>17.8 mm</td><td>7.5</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">58</td><td>58.0 mm</td><td>18.5 mm</td><td>8.25</td></tr>
+                            <tr><td class="py-1.5 font-medium text-neutral-900">60</td><td>60.0 mm</td><td>19.1 mm</td><td>9.0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-[11px] text-neutral-400 mt-4 text-center font-light">
+                    * FORME มีบริการปรับแก้ขนาดแหวนฟรี 1 ครั้ง ภายใน 30 วัน
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Backoffice Modal (Minimal) -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
+            <div onclick="closeAdminDashboard()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+            
+            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-5xl w-full my-8 text-left shadow-xl z-10">
+                <div class="flex justify-between items-center mb-6 border-b border-neutral-100 pb-4">
+                    <div>
+                        <span class="text-[10px] text-neutral-400 font-light uppercase tracking-widest">Management</span>
+                        <h2 class="text-2xl font-serif text-neutral-900">ระบบจัดการร้าน FORME</h2>
+                    </div>
+                    <button onclick="closeAdminDashboard()" class="text-neutral-400 hover:text-black">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- KPIs Minimal -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span class="text-[11px] text-neutral-500 font-light">ยอดขายรวม</span>
+                        <p class="text-lg font-medium text-neutral-900 mt-0.5 font-serif-luxury" id="adminStatRevenue">฿0</p>
+                    </div>
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span class="text-[11px] text-neutral-500 font-light">คำสั่งซื้อทั้งหมด</span>
+                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatOrders">0</p>
+                    </div>
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span class="text-[11px] text-neutral-500 font-light">สินค้าในระบบ</span>
+                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatProducts">0</p>
+                    </div>
+                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
+                        <span class="text-[11px] text-neutral-500 font-light">สต็อกเหลือน้อย</span>
+                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatLowStock">0</p>
+                    </div>
+                </div>
+
+                <!-- Admin Orders & New Product -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="text-xs font-medium text-neutral-900 uppercase tracking-wider">คำสั่งซื้อล่าสุด</h4>
+                            <button onclick="loadAdminOrders()" class="text-xs text-neutral-500 hover:text-black underline">
+                                รีเฟรช
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto rounded-lg border border-neutral-200">
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-neutral-50 text-neutral-500 font-light border-b border-neutral-200">
+                                    <tr>
+                                        <th class="py-2.5 px-3">เลขคำสั่งซื้อ</th>
+                                        <th class="py-2.5 px-3">ลูกค้า</th>
+                                        <th class="py-2.5 px-3">สินค้า</th>
+                                        <th class="py-2.5 px-3">ยอดเงิน</th>
+                                        <th class="py-2.5 px-3">สถานะ</th>
+                                        <th class="py-2.5 px-3 text-center">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminOrdersTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-medium text-neutral-900 uppercase tracking-wider">เพิ่มสินค้าใหม่</h4>
+                        
+                        <form id="newProductForm" onsubmit="submitNewProductForm(event)" class="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-2.5 text-xs">
+                            <div>
+                                <label class="text-neutral-600 block mb-1 font-light">ชื่อสินค้า *</label>
+                                <input type="text" id="newProdName" required placeholder="แหวนเพชร Halo 18K" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">หมวดหมู่</label>
+                                    <select id="newProdCategory" class="w-full bg-white border border-neutral-300 rounded px-2 py-1 text-neutral-900">
+                                        <option value="rings">แหวน</option>
+                                        <option value="necklaces">สร้อยคอ</option>
+                                        <option value="earrings">ต่างหู</option>
+                                        <option value="bracelets">กำไล</option>
+                                        <option value="bridal">เซ็ตวิวาห์</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">ราคา (฿) *</label>
+                                    <input type="number" id="newProdPrice" required placeholder="25000" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">ราคาเต็ม</label>
+                                    <input type="number" id="newProdOrigPrice" placeholder="29000" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                                </div>
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">สต็อก</label>
+                                    <input type="number" id="newProdStock" value="5" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">ตัวเรือน</label>
+                                    <input type="text" id="newProdMaterial" value="ทองคำขาว 18K" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                                </div>
+                                <div>
+                                    <label class="text-neutral-600 block mb-1 font-light">อัญมณี</label>
+                                    <input type="text" id="newProdGemstone" value="เพชรแท้ (GIA)" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="text-neutral-600 block mb-1 font-light">URL รูปภาพ *</label>
+                                <input type="url" id="newProdImage" required placeholder="https://..." class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                            </div>
+
+                            <div>
+                                <label class="text-neutral-600 block mb-1 font-light">Badge</label>
+                                <input type="text" id="newProdBadge" placeholder="สินค้าใหม่ / ขายดี" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
+                            </div>
+
+                            <button type="submit" class="w-full py-2 rounded-full bg-neutral-900 text-white text-xs hover:bg-black transition mt-1">
+                                + บันทึกสินค้า
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm"></div>
+
+    <!-- Application Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

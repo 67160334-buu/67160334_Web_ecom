@@ -1,0 +1,158 @@
+/* FORME FINE JEWELRY - MINIMAL EDITORIAL LUXURY STYLESHEET */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@200;300;400;500;600&family=Prompt:wght@200;300;400;500;600&display=swap');
+
+:root {
+    --bg-primary: #FAF9F6;
+    --bg-surface: #FFFFFF;
+    --bg-subtle: #F4F3EF;
+    --text-primary: #121212;
+    --text-secondary: #52525B;
+    --text-muted: #71717A;
+    --border-light: #E4E4E7;
+    --border-dark: #18181B;
+    --accent-sand: #D5C7B3;
+    --accent-warm: #C5A880;
+}
+
+body {
+    font-family: 'Prompt', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+}
+
+h1, h2, h3, .font-serif-luxury {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: 0.04em;
+    font-weight: 400;
+}
+
+.brand-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    letter-spacing: 0.28em;
+    font-weight: 400;
+}
+
+/* Minimalist Navigation & Header */
+.minimal-nav {
+    background: rgba(250, 249, 246, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Minimalist Cards */
+.product-card {
+    background: #FFFFFF;
+    border: 1px solid #ECEAE5;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover {
+    border-color: #121212;
+    transform: translateY(-3px);
+}
+
+.product-img {
+    transition: transform 0.5s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.04);
+}
+
+/* Category Filter Tabs (Minimal Underline) */
+.cat-tab {
+    position: relative;
+    padding-bottom: 8px;
+    font-size: 0.825rem;
+    color: #71717A;
+    transition: all 0.2s ease;
+    letter-spacing: 0.04em;
+}
+
+.cat-tab:hover {
+    color: #121212;
+}
+
+.cat-tab.active {
+    color: #121212;
+    font-weight: 500;
+}
+
+.cat-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background-color: #121212;
+}
+
+/* Ring size selection buttons */
+.size-btn {
+    border: 1px solid #E4E4E7;
+    background: #FFFFFF;
+    color: #27272A;
+    transition: all 0.2s ease;
+}
+
+.size-btn:hover {
+    border-color: #18181B;
+}
+
+.size-btn.active {
+    background: #121212;
+    color: #FFFFFF;
+    border-color: #121212;
+    font-weight: 500;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #FAF9F6;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D4D4D8;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #A1A1AA;
+}
+
+/* QR Code Container */
+.qr-container {
+    background: white;
+    padding: 16px;
+    border: 1px solid #E4E4E7;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* Print styles for Receipt */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #receiptPrintArea, #receiptPrintArea * {
+        visibility: visible;
+    }
+    #receiptPrintArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        color: black;
+        padding: 20px;
+    }
+}
