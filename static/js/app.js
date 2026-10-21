@@ -38,7 +38,331 @@ async function initApp() {
     setupAdminStatsAutoRefresh();
 }
 
-// Fetch Products from API
+// Default Catalog (Fallback for static hosting / GitHub Pages)
+const DEFAULT_PRODUCTS = [
+    {
+        id: 1,
+        name: "แหวนเพชรแท้ Solitaire Eternal Brilliance 18K",
+        category: "rings",
+        material: "ทองคำขาว 18K",
+        gemstone: "เพชรแท้ (GIA)",
+        carat: "0.70 กะรัต (Color D / VVS1)",
+        price: 35900,
+        original_price: 42000,
+        stock: 5,
+        badge: "ขายดีอันดับ 1",
+        rating: 4.9,
+        review_count: 48,
+        image_url: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "แหวนหมั้นและแหวนแต่งงานเพชรเม็ดเดี่ยว ดีไซน์คลาสสิกเหนือกาลเวลา เพชรแท้น้ำ 100 ความสะอาดระดับ VVS1 เปล่งประกายสูงสุด พร้อมใบเซอร์ GIA สากล ตัวเรือนทองคำขาว 18K ขึ้นรูปประณีต",
+        details: [
+            "เพชรแท้ธรรมชาติทรงกลม Brilliant Cut 0.70 กะรัต",
+            "เกรดสี: D (น้ำ 100) / ความสะอาด: VVS1 / การเจียระไน: Excellent 3EX",
+            "ตัวเรือน: ทองคำขาวแท้ 18K (White Gold 750)",
+            "พร้อมใบรับรองสากล GIA และใบรับประกันร้านตลอดชีพ"
+        ],
+        sizes: ["48", "49", "50", "52", "54", "56", "58"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 2,
+        name: "สร้อยคอทองคำแท้ จี้เพชรรูปหัวใจ Amour Diamond Pendant",
+        category: "necklaces",
+        material: "ทองคำแท้ 18K",
+        gemstone: "เพชรแท้ (GIA)",
+        carat: "0.35 กะรัต",
+        price: 18500,
+        original_price: 22900,
+        stock: 8,
+        badge: "ยอดนิยม",
+        rating: 5.0,
+        review_count: 34,
+        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "สร้อยคอทองคำ 18K ดีไซน์โซ่เรียบหรู พร้อมจี้หัวใจประดับเพชรแท้ประกายระยิบระยับ สัญลักษณ์แห่งความรักอันบริสุทธิ์",
+        details: [
+            "ความยาวสร้อย: 42 ซม. ปรับระดับได้ถึง 45 ซม.",
+            "เพชรแท้เบลเยี่ยมคัท น้ำหนักรวม 0.35 กะรัต น้ำ 99 (E Color)",
+            "ตัวเรือน: ทองแท้ 18K Yellow Gold"
+        ],
+        sizes: ["42-45 cm (Standard)"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 3,
+        name: "ต่างหูไข่มุกเซาท์ซีแท้ Golden South Sea Pearl Drop Earrings",
+        category: "earrings",
+        material: "ทองคำแท้ 18K",
+        gemstone: "ไข่มุกแท้ (South Sea Pearl)",
+        carat: "ไข่มุกขนาด 11-12 mm",
+        price: 24900,
+        original_price: 29500,
+        stock: 4,
+        badge: "หรูหราพรีเมียม",
+        rating: 4.8,
+        review_count: 21,
+        image_url: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "ต่างหูไข่มุกทอง South Sea ธรรมชาติ สีทองประกายธรรมชาติ ลัสเตอร์เงางามดุจกระจก ประดับเพชรแท้ด้านบน",
+        details: [
+            "ไข่มุก South Sea ธรรมชาติ 100% ขนาด 11.5 มม.",
+            "ประดับเพชรแท้ทรงกลมรวม 0.20 กะรัต",
+            "ตัวเรือนทองแท้ 18K สี Yellow Gold ผิวเงา"
+        ],
+        sizes: ["One Size"],
+        can_engrave: 0,
+        is_featured: 1
+    },
+    {
+        id: 4,
+        name: "สร้อยข้อมือเพชรรอบวง Classic Tennis Bracelet 18K",
+        category: "bracelets",
+        material: "ทองคำขาว 18K",
+        gemstone: "เพชรแท้ (GIA)",
+        carat: "เพชรรวม 3.50 กะรัต (52 เม็ด)",
+        price: 68000,
+        original_price: 79000,
+        stock: 3,
+        badge: "Signature",
+        rating: 5.0,
+        review_count: 19,
+        image_url: "https://images.unsplash.com/photo-1611591475102-44122d264585?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1611591475102-44122d264585?w=800&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "สร้อยข้อมือเทนนิสเพชรแท้แถวเดี่ยว สัญลักษณ์ของความหรูหราขั้นสุด เพชรน้ำงามขนาดเท่ากันทุกเม็ด",
+        details: [
+            "เพชรแท้ธรรมชาติ 52 เม็ด รวม 3.50 กะรัต น้ำ 98-99 (F-E Color)",
+            "ตัวเรือนทองคำขาวแท้ 18K (750 White Gold)",
+            "ความยาว 16.5 ซม."
+        ],
+        sizes: ["15.5 cm", "16.5 cm", "17.5 cm"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 5,
+        name: "แหวนพลอยไพลินซีลอนแท้ล้อมเพชร Royal Ceylon Sapphire Ring",
+        category: "rings",
+        material: "ทองคำขาว 18K",
+        gemstone: "ไพลินแท้ (Ceylon Sapphire)",
+        carat: "ไพลิน 1.80 กะรัต + เพชร 0.45 กะรัต",
+        price: 45000,
+        original_price: 54000,
+        stock: 2,
+        badge: "อัญมณีล้ำค่า",
+        rating: 4.9,
+        review_count: 16,
+        image_url: "https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "แหวนไพลินสีน้ำเงินรอยัลบลู จากแหล่งซีลอน ล้อมรอบด้วยเพชรแท้เจียระไนแบบเหลี่ยมเกสร สไตล์เจ้าหญิง",
+        details: [
+            "ไพลินแท้ธรรมชาติ สี Royal Blue หนัก 1.80 กะรัต",
+            "เพชรแท้ล้อมวงและบ่าข้าง รวม 0.45 กะรัต น้ำ 99"
+        ],
+        sizes: ["50", "52", "54", "56"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 6,
+        name: "จี้มรกตโคลัมเบียแท้ล้อมเพชร Colombian Emerald Pendant 18K",
+        category: "necklaces",
+        material: "ทองคำแท้ 18K",
+        gemstone: "มรกตแท้ (Emerald)",
+        carat: "มรกต 1.25 กะรัต + เพชร 0.30 กะรัต",
+        price: 38900,
+        original_price: 45000,
+        stock: 3,
+        badge: "คอลเลกชันใหม่",
+        rating: 5.0,
+        review_count: 12,
+        image_url: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "จี้มรกตโคลัมเบียสีเขียวเข้มสดใส ทรงหยดน้ำ ล้อมรอบด้วยเพชรแท้เปล่งประกาย ตัวเรือนทองคำแท้ 18K",
+        details: [
+            "มรกตธรรมชาติแท้แหล่งโคลัมเบีย 1.25 กะรัต ทรง Pear Cut",
+            "เพชรแท้ล้อม 2 ชั้น น้ำ 99 รวม 0.30 กะรัต"
+        ],
+        sizes: ["One Size (พร้อมสายสร้อย 18K 45 cm)"],
+        can_engrave: 1,
+        is_featured: 0
+    },
+    {
+        id: 7,
+        name: "กำไลข้อมือทองคำแท้ 18K ดีไซน์เกลียวเพชร Aurora Spiral Bangle",
+        category: "bracelets",
+        material: "พิงก์โกลด์ 18K",
+        gemstone: "เพชรแท้",
+        carat: "0.40 กะรัต",
+        price: 39500,
+        original_price: 46000,
+        stock: 6,
+        badge: "ยอดนิยม",
+        rating: 4.9,
+        review_count: 27,
+        image_url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "กำไลทองชมพู Rose Gold 18K ดีไซน์รูปทรงคลื่นเกลียวทันสมัย ปลายกำไลฝังเพชรแท้ทรงกลม",
+        details: [
+            "ทองคำแท้ 18K Rose Gold น้ำหนัก 9.2 กรัม",
+            "เพชรแท้คัดเกรด Heart & Arrow รวม 0.40 กะรัต"
+        ],
+        sizes: ["S (14-15 cm)", "M (15.5-16.5 cm)", "L (17-18 cm)"],
+        can_engrave: 1,
+        is_featured: 0
+    },
+    {
+        id: 8,
+        name: "ต่างหูห่วงเพชรแท้รอบวง Diamond Huggie Hoop Earrings",
+        category: "earrings",
+        material: "ทองคำขาว 18K",
+        gemstone: "เพชรแท้",
+        carat: "0.55 กะรัต",
+        price: 21900,
+        original_price: 26000,
+        stock: 9,
+        badge: "Must Have",
+        rating: 4.8,
+        review_count: 42,
+        image_url: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "ต่างหูห่วงเพชรแท้ดีไซน์ Huggie แนบกระชับใบหู ฝังเพชรทั้งด้านนอกและด้านใน เปล่งประกายรอบทิศทาง",
+        details: [
+            "เพชรแท้กลม 28 เม็ด รวม 0.55 กะรัต น้ำ 99 E Color",
+            "ตัวเรือนทองคำขาว 18K ระบบตัวล็อกคลิกแน่นหนา"
+        ],
+        sizes: ["One Size (14 mm)"],
+        can_engrave: 0,
+        is_featured: 0
+    },
+    {
+        id: 9,
+        name: "เซ็ตเครื่องประดับเจ้าสาว Rose Gold Bridal Elegance Set",
+        category: "bridal",
+        material: "พิงก์โกลด์ 18K",
+        gemstone: "เพชรแท้",
+        carat: "เพชรรวม 2.20 กะรัต",
+        price: 89000,
+        original_price: 105000,
+        stock: 2,
+        badge: "ชุดพิเศษงานวิวาห์",
+        rating: 5.0,
+        review_count: 9,
+        image_url: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "เซ็ตเจ้าสาวสุดหรูหรา ประกอบด้วยสร้อยคอเพชร ต่างหูระย้า และแหวนคู่เพชรแท้ เข้าชุดในโทนสีพิงก์โกลด์",
+        details: [
+            "ประกอบด้วย: สร้อยคอ + ต่างหูระย้า + แหวนเพชร",
+            "เพชรแท้รวมทั้งเซ็ต 2.20 กะรัต น้ำ 100-99 (D-E Color)"
+        ],
+        sizes: ["Custom Ring Size"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 10,
+        name: "แหวนทับทิมสยามล้อมเพชร Siam Ruby & Diamond Halo Ring",
+        category: "rings",
+        material: "ทองคำแท้ 18K",
+        gemstone: "ทับทิมแท้ (Pigeon's Blood)",
+        carat: "ทับทิม 2.05 กะรัต + เพชร 0.50 กะรัต",
+        price: 52000,
+        original_price: 63000,
+        stock: 3,
+        badge: "อัญมณีมงคล",
+        rating: 4.9,
+        review_count: 14,
+        image_url: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "แหวนทับทิมแท้สีเลือดนกพิราบ สีแดงสดสะกดสายตา ล้อมรอบด้วยเพชรแท้น้ำ 99 สองชั้น",
+        details: [
+            "ทับทิมแท้ธรรมชาติรูปไข่ Oval Cut ขนาด 2.05 กะรัต",
+            "เพชรแท้ล้อมรอบและก้านแหวน รวม 0.50 กะรัต"
+        ],
+        sizes: ["50", "52", "54", "56", "58"],
+        can_engrave: 1,
+        is_featured: 0
+    },
+    {
+        id: 11,
+        name: "แหวนเพชรรอบวง Eternity Diamond Band 18K",
+        category: "rings",
+        material: "ทองคำแท้ 18K",
+        gemstone: "เพชรแท้",
+        carat: "0.85 กะรัต",
+        price: 27500,
+        original_price: 32000,
+        stock: 7,
+        badge: "ยอดนิยม",
+        rating: 4.9,
+        review_count: 31,
+        image_url: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "แหวนเพชรรอบวงแบบ Full Eternity สัญลักษณ์แห่งความรักที่ไม่มีวันสิ้นสุด ฝังเพชรแท้เรียงชิดติดกันรอบวง",
+        details: [
+            "เพชรแท้ธรรมชาติฝังรอบวง รวม 0.85 กะรัต น้ำ 99 E Color",
+            "ตัวเรือนทองคำแท้ 18K Yellow Gold"
+        ],
+        sizes: ["48", "50", "52", "54", "56"],
+        can_engrave: 1,
+        is_featured: 1
+    },
+    {
+        id: 12,
+        name: "สร้อยคอเงินแท้ 925 ชุบทองคำขาว จี้คริสตัลหยดน้ำ Grace Pendant",
+        category: "necklaces",
+        material: "เงินแท้ 925",
+        gemstone: "คริสตัลสวิสเกรด 5A",
+        carat: "เทียบเท่า 1.0 กะรัต",
+        price: 2890,
+        original_price: 3800,
+        stock: 20,
+        badge: "ราคาเข้าถึงง่าย",
+        rating: 4.7,
+        review_count: 55,
+        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
+        gallery: [
+            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80"
+        ],
+        description: "สร้อยคอเงินแท้ 925 สเตอร์ลิง ชุบทองคำขาวหนาพิเศษ จี้ทรงหยดน้ำคริสตัลเกรด 5A สะท้อนแสงวิบวับ",
+        details: [
+            "เงินแท้ 925 ชุบ White Gold ไม่ลอกไม่ดำง่าย",
+            "คริสตัลสวิสเกรด 5A ทรง Teardrop"
+        ],
+        sizes: ["40-45 cm"],
+        can_engrave: 0,
+        is_featured: 0
+    }
+];
+
+// Fetch Products from API with Static Fallback
 async function fetchProducts() {
     try {
         const params = new URLSearchParams();
@@ -51,14 +375,39 @@ async function fetchProducts() {
         if (state.filters.maxPrice) params.append('max_price', state.filters.maxPrice);
 
         const res = await fetch(`/api/products?${params.toString()}`);
+        if (!res.ok) throw new Error('API unavailable, use fallback');
         const data = await res.json();
         if (data.success) {
             state.products = data.products;
             renderProducts(state.products);
+            return;
         }
     } catch (err) {
-        console.error('Error fetching products:', err);
-        showToast('ไม่สามารถโหลดข้อมูลสินค้าได้', 'error');
+        // Client-side fallback for GitHub Pages
+        let prods = [...DEFAULT_PRODUCTS];
+        if (state.activeCategory && state.activeCategory !== 'all') {
+            prods = prods.filter(p => p.category === state.activeCategory);
+        }
+        if (state.filters.material && state.filters.material !== 'all') {
+            prods = prods.filter(p => p.material.includes(state.filters.material));
+        }
+        if (state.filters.gemstone && state.filters.gemstone !== 'all') {
+            prods = prods.filter(p => (p.gemstone || '').includes(state.filters.gemstone));
+        }
+        if (state.filters.search) {
+            const s = state.filters.search.toLowerCase();
+            prods = prods.filter(p => p.name.toLowerCase().includes(s) || p.description.toLowerCase().includes(s));
+        }
+        if (state.filters.minPrice) prods = prods.filter(p => p.price >= state.filters.minPrice);
+        if (state.filters.maxPrice) prods = prods.filter(p => p.price <= state.filters.maxPrice);
+
+        if (state.filters.sort === 'price_asc') prods.sort((a,b) => a.price - b.price);
+        else if (state.filters.sort === 'price_desc') prods.sort((a,b) => b.price - a.price);
+        else if (state.filters.sort === 'rating') prods.sort((a,b) => b.rating - a.rating);
+        else if (state.filters.sort === 'newest') prods.sort((a,b) => b.id - a.id);
+
+        state.products = prods;
+        renderProducts(state.products);
     }
 }
 
@@ -238,12 +587,19 @@ function toggleWishlist(productId, event) {
 
 // Open Product Modal (Minimalist)
 async function openProductModal(productId) {
+    let p = null;
     try {
         const res = await fetch(`/api/products/${productId}`);
-        const data = await res.json();
-        if (!data.success) return;
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) p = data.product;
+        }
+    } catch (err) {}
 
-        const p = data.product;
+    if (!p) {
+        p = (state.products || []).find(item => item.id === productId) || DEFAULT_PRODUCTS.find(item => item.id === productId);
+    }
+    if (!p) return;
         state.currentProduct = p;
         state.activeGalleryIndex = 0;
         state.selectedSize = (p.sizes && p.sizes.length > 0) ? p.sizes[0] : '';
@@ -676,18 +1032,43 @@ async function applyCoupon() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code: code, cart_total: subtotal })
         });
-        const data = await res.json();
-        if (data.success) {
-            state.appliedCoupon = data;
-            localStorage.setItem('forme_coupon', JSON.stringify(data));
-            renderCart();
-            showToast(data.message, 'success');
-            if (input) input.value = '';
-        } else {
-            showToast(data.message || 'รหัสคูปองไม่ถูกต้อง', 'error');
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                state.appliedCoupon = data;
+                localStorage.setItem('forme_coupon', JSON.stringify(data));
+                renderCart();
+                showToast(data.message, 'success');
+                if (input) input.value = '';
+                return;
+            } else {
+                showToast(data.message || 'รหัสคูปองไม่ถูกต้อง', 'error');
+                return;
+            }
         }
-    } catch (err) {
-        showToast('ไม่สามารถตรวจสอบคูปองได้', 'error');
+    } catch (err) {}
+
+    // Static fallback
+    const staticCoupons = {
+        'WELCOME10': { discount_type: 'percentage', discount_value: 10, min_spend: 1000, description: 'ส่วนลด 10%' },
+        'SPARKLE500': { discount_type: 'fixed', discount_value: 500, min_spend: 3000, description: 'ส่วนลด 500.-' },
+        'LUXE20': { discount_type: 'percentage', discount_value: 20, min_spend: 10000, description: 'ส่วนลด 20%' }
+    };
+    if (staticCoupons[code]) {
+        const c = staticCoupons[code];
+        if (subtotal < c.min_spend) {
+            showToast(`คูปองนี้ใช้ได้เมื่อช้อปครบ ฿${c.min_spend.toLocaleString()}`, 'warning');
+            return;
+        }
+        const disc = c.discount_type === 'percentage' ? Math.round(subtotal * (c.discount_value / 100)) : c.discount_value;
+        const couponData = { code, discount_type: c.discount_type, discount_value: c.discount_value, discount_amount: disc, description: c.description };
+        state.appliedCoupon = couponData;
+        localStorage.setItem('forme_coupon', JSON.stringify(couponData));
+        renderCart();
+        showToast(`ใช้คูปอง ${code} สำเร็จ! ประหยัด ฿${disc.toLocaleString()}`, 'success');
+        if (input) input.value = '';
+    } else {
+        showToast('รหัสคูปองไม่ถูกต้อง หรือหมดอายุแล้ว', 'error');
     }
 }
 
@@ -865,22 +1246,45 @@ async function processOrderSubmit(event) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        const data = await res.json();
-        if (data.success) {
-            closeCheckoutModal();
-            state.cart = [];
-            state.appliedCoupon = null;
-            saveCart();
-            localStorage.removeItem('forme_coupon');
-            updateCartCount();
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                closeCheckoutModal();
+                state.cart = [];
+                state.appliedCoupon = null;
+                saveCart();
+                localStorage.removeItem('forme_coupon');
+                updateCartCount();
 
-            showOrderSuccessModal(data, payload);
-        } else {
-            showToast(data.message || 'เกิดข้อผิดพลาดในการสั่งซื้อ', 'error');
+                showOrderSuccessModal(data, payload);
+                return;
+            }
         }
-    } catch (err) {
-        showToast('ไม่สามารถส่งคำสั่งซื้อได้ กรุณาลองใหม่อีกครั้ง', 'error');
-    }
+    } catch (err) {}
+
+    // Static fallback for GitHub Pages
+    const orderNum = `FRM-${new Date().toISOString().slice(0,10).replace(/-/g,'')}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const trackingNum = `THP${Math.floor(100000000 + Math.random() * 900000000)}TH`;
+    const staticOrder = {
+        order_number: orderNum,
+        tracking_number: trackingNum,
+        total: Math.max(0, subtotal - discountAmount + (subtotal >= 2000 ? 0 : 100)),
+        order_status: 'processing',
+        payment_status: ['promptpay', 'card'].includes(paymentMethod) ? 'paid' : 'pending',
+        ...payload
+    };
+    const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+    savedOrders.unshift(staticOrder);
+    localStorage.setItem('forme_orders', JSON.stringify(savedOrders));
+
+    closeCheckoutModal();
+    state.cart = [];
+    state.appliedCoupon = null;
+    saveCart();
+    localStorage.removeItem('forme_coupon');
+    updateCartCount();
+
+    showOrderSuccessModal(staticOrder, payload);
 }
 
 // Show Order Success Modal & Receipt
@@ -912,15 +1316,24 @@ async function trackOrderModal(orderRef) {
         return;
     }
 
+    let o = null;
     try {
         const res = await fetch(`/api/orders/${encodeURIComponent(ref)}`);
-        const data = await res.json();
-        if (!data.success) {
-            showToast(data.message || 'ไม่พบข้อมูลคำสั่งซื้อ', 'error');
-            return;
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) o = data.order;
         }
+    } catch (err) {}
 
-        const o = data.order;
+    if (!o) {
+        const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+        o = savedOrders.find(item => item.order_number === ref || item.customer_phone === ref || item.tracking_number === ref);
+    }
+
+    if (!o) {
+        showToast('ไม่พบข้อมูลคำสั่งซื้อ กรุณาตรวจสอบรหัสหรือเบอร์โทร', 'error');
+        return;
+    }
         const resultContainer = document.getElementById('trackingResultContainer');
         if (!resultContainer) return;
 
@@ -1037,31 +1450,49 @@ function closeAdminDashboard() {
 async function loadAdminStats() {
     try {
         const res = await fetch('/api/admin/stats');
-        const data = await res.json();
-        if (data.success) {
-            document.getElementById('adminStatRevenue').innerText = `฿${data.total_revenue.toLocaleString()}`;
-            document.getElementById('adminStatOrders').innerText = data.total_orders;
-            document.getElementById('adminStatProducts').innerText = data.total_products;
-            document.getElementById('adminStatLowStock').innerText = data.low_stock_products;
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('adminStatRevenue').innerText = `฿${data.total_revenue.toLocaleString()}`;
+                document.getElementById('adminStatOrders').innerText = data.total_orders;
+                document.getElementById('adminStatProducts').innerText = data.total_products;
+                document.getElementById('adminStatLowStock').innerText = data.low_stock_products;
+                return;
+            }
         }
-    } catch (err) {
-        console.error('Error loading admin stats:', err);
-    }
+    } catch (err) {}
+
+    const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+    const totalRev = savedOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+    document.getElementById('adminStatRevenue').innerText = `฿${totalRev.toLocaleString()}`;
+    document.getElementById('adminStatOrders').innerText = savedOrders.length;
+    document.getElementById('adminStatProducts').innerText = (state.products || DEFAULT_PRODUCTS).length;
+    document.getElementById('adminStatLowStock').innerText = (state.products || DEFAULT_PRODUCTS).filter(p => p.stock <= 3).length;
 }
 
 async function loadAdminOrders() {
+    let orders = [];
     try {
         const res = await fetch('/api/admin/orders');
-        const data = await res.json();
-        const tbody = document.getElementById('adminOrdersTableBody');
-        if (!tbody) return;
-
-        if (!data.orders || data.orders.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-neutral-400 text-xs">ยังไม่มีคำสั่งซื้อในระบบ</td></tr>`;
-            return;
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success) orders = data.orders;
         }
+    } catch (err) {}
 
-        tbody.innerHTML = data.orders.map(o => `
+    if (orders.length === 0) {
+        orders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+    }
+
+    const tbody = document.getElementById('adminOrdersTableBody');
+    if (!tbody) return;
+
+    if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-neutral-400 text-xs">ยังไม่มีคำสั่งซื้อในระบบ</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = orders.map(o => `
             <tr class="border-b border-neutral-100 hover:bg-neutral-50 text-xs text-neutral-800">
                 <td class="py-3 px-3 font-mono font-medium text-neutral-900">${o.order_number}</td>
                 <td class="py-3 px-3">
