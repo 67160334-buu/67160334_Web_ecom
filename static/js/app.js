@@ -587,19 +587,20 @@ function toggleWishlist(productId, event) {
 
 // Open Product Modal (Minimalist)
 async function openProductModal(productId) {
-    let p = null;
     try {
-        const res = await fetch(`/api/products/${productId}`);
-        if (res.ok) {
-            const data = await res.json();
-            if (data.success) p = data.product;
-        }
-    } catch (err) {}
+        let p = null;
+        try {
+            const res = await fetch(`/api/products/${productId}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) p = data.product;
+            }
+        } catch (err) {}
 
-    if (!p) {
-        p = (state.products || []).find(item => item.id === productId) || DEFAULT_PRODUCTS.find(item => item.id === productId);
-    }
-    if (!p) return;
+        if (!p) {
+            p = (state.products || []).find(item => item.id === productId) || DEFAULT_PRODUCTS.find(item => item.id === productId);
+        }
+        if (!p) return;
         state.currentProduct = p;
         state.activeGalleryIndex = 0;
         state.selectedSize = (p.sizes && p.sizes.length > 0) ? p.sizes[0] : '';
@@ -1310,11 +1311,12 @@ function closeOrderSuccessModal() {
 
 // Order Tracking Function (Minimalist)
 async function trackOrderModal(orderRef) {
-    const ref = orderRef || document.getElementById('trackOrderInput')?.value.trim();
-    if (!ref) {
-        showToast('กรุณากรอกหมายเลขคำสั่งซื้อ หรือเบอร์โทรศัพท์', 'warning');
-        return;
-    }
+    try {
+        const ref = orderRef || document.getElementById('trackOrderInput')?.value.trim();
+        if (!ref) {
+            showToast('กรุณากรอกหมายเลขคำสั่งซื้อ หรือเบอร์โทรศัพท์', 'warning');
+            return;
+        }
 
     let o = null;
     try {
@@ -1471,28 +1473,29 @@ async function loadAdminStats() {
 }
 
 async function loadAdminOrders() {
-    let orders = [];
     try {
-        const res = await fetch('/api/admin/orders');
-        if (res.ok) {
-            const data = await res.json();
-            if (data.success) orders = data.orders;
+        let orders = [];
+        try {
+            const res = await fetch('/api/admin/orders');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) orders = data.orders;
+            }
+        } catch (e) {}
+
+        if (orders.length === 0) {
+            orders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
         }
-    } catch (err) {}
 
-    if (orders.length === 0) {
-        orders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
-    }
+        const tbody = document.getElementById('adminOrdersTableBody');
+        if (!tbody) return;
 
-    const tbody = document.getElementById('adminOrdersTableBody');
-    if (!tbody) return;
+        if (!orders || orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-neutral-400 text-xs">ยังไม่มีคำสั่งซื้อในระบบ</td></tr>`;
+            return;
+        }
 
-    if (!orders || orders.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-neutral-400 text-xs">ยังไม่มีคำสั่งซื้อในระบบ</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = orders.map(o => `
+        tbody.innerHTML = orders.map(o => `
             <tr class="border-b border-neutral-100 hover:bg-neutral-50 text-xs text-neutral-800">
                 <td class="py-3 px-3 font-mono font-medium text-neutral-900">${o.order_number}</td>
                 <td class="py-3 px-3">
@@ -1500,12 +1503,12 @@ async function loadAdminOrders() {
                     <p class="text-[11px] text-neutral-400">${o.customer_phone}</p>
                 </td>
                 <td class="py-3 px-3">
-                    <span>${o.items.length} ชิ้น</span>
+                    <span>${(o.items || []).length} ชิ้น</span>
                     ${o.gift_wrap ? '<span class="ml-1 text-[10px] text-neutral-500">(ของขวัญ)</span>' : ''}
                 </td>
-                <td class="py-3 px-3 font-medium text-neutral-900">฿${o.total.toLocaleString()}</td>
+                <td class="py-3 px-3 font-medium text-neutral-900">฿${(o.total || 0).toLocaleString()}</td>
                 <td class="py-3 px-3">
-                    <select onchange="updateOrderStatus(${o.id}, this.value)" class="bg-white border border-neutral-200 rounded px-2 py-1 text-xs text-neutral-800">
+                    <select onchange="updateOrderStatus(${o.id || 0}, this.value)" class="bg-white border border-neutral-200 rounded px-2 py-1 text-xs text-neutral-800">
                         <option value="processing" ${o.order_status === 'processing' ? 'selected' : ''}>รอดำเนินการ</option>
                         <option value="preparing" ${o.order_status === 'preparing' ? 'selected' : ''}>เตรียมสินค้า</option>
                         <option value="quality_check" ${o.order_status === 'quality_check' ? 'selected' : ''}>ตรวจ GIA</option>

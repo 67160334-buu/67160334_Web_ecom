@@ -138,6 +138,10 @@ h1, h2, h3, .font-serif-luxury {
     display: inline-block;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* Print styles for Receipt */
 @media print {
     body * {
