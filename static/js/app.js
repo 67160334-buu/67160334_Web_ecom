@@ -41,324 +41,387 @@ async function initApp() {
 // Default Catalog (Fallback for static hosting / GitHub Pages)
 const DEFAULT_PRODUCTS = [
     {
-        id: 1,
-        name: "แหวนเพชรแท้ Solitaire Eternal Brilliance 18K",
-        category: "rings",
-        material: "ทองคำขาว 18K",
-        gemstone: "เพชรแท้ (GIA)",
-        carat: "0.70 กะรัต (Color D / VVS1)",
-        price: 35900,
-        original_price: 42000,
-        stock: 5,
-        badge: "ขายดีอันดับ 1",
-        rating: 4.9,
-        review_count: 48,
-        image_url: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80"
+        "id": 1,
+        "name": "แหวนเพชรแท้ Solitaire Eternal Brilliance 18K",
+        "category": "rings",
+        "material": "ทองคำขาว 18K",
+        "gemstone": "เพชรแท้ (GIA)",
+        "carat": "0.70 กะรัต (Color D / VVS1)",
+        "price": 35900,
+        "original_price": 42000,
+        "stock": 5,
+        "badge": "ขายดีอันดับ 1",
+        "rating": 4.9,
+        "review_count": 48,
+        "image_url": "static/images/products/solitaire_ring.jpg",
+        "gallery": [
+            "static/images/products/solitaire_ring.jpg"
         ],
-        description: "แหวนหมั้นและแหวนแต่งงานเพชรเม็ดเดี่ยว ดีไซน์คลาสสิกเหนือกาลเวลา เพชรแท้น้ำ 100 ความสะอาดระดับ VVS1 เปล่งประกายสูงสุด พร้อมใบเซอร์ GIA สากล ตัวเรือนทองคำขาว 18K ขึ้นรูปประณีต",
-        details: [
+        "description": "แหวนหมั้นและแหวนแต่งงานเพชรเม็ดเดี่ยว ดีไซน์คลาสสิกเหนือกาลเวลา ฝังเพชรแท้น้ำ 100 6 หนามเตยประณีตสูงสุด ความสะอาดระดับ VVS1 พร้อมใบเซอร์ GIA สากล ตัวเรือนทองคำขาว 18K",
+        "details": [
             "เพชรแท้ธรรมชาติทรงกลม Brilliant Cut 0.70 กะรัต",
             "เกรดสี: D (น้ำ 100) / ความสะอาด: VVS1 / การเจียระไน: Excellent 3EX",
             "ตัวเรือน: ทองคำขาวแท้ 18K (White Gold 750)",
-            "พร้อมใบรับรองสากล GIA และใบรับประกันร้านตลอดชีพ"
+            "พร้อมใบรับรองสากล GIA และใบรับประกันร้านตลอดชีพ",
+            "แถมฟรี: กล่องกำมะหยี่หรูหรา & ผ้าเช็ดจิวเวลรี่พิเศษ"
         ],
-        sizes: ["48", "49", "50", "52", "54", "56", "58"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "48",
+            "49",
+            "50",
+            "52",
+            "54",
+            "56",
+            "58"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 2,
-        name: "สร้อยคอทองคำแท้ จี้เพชรรูปหัวใจ Amour Diamond Pendant",
-        category: "necklaces",
-        material: "ทองคำแท้ 18K",
-        gemstone: "เพชรแท้ (GIA)",
-        carat: "0.35 กะรัต",
-        price: 18500,
-        original_price: 22900,
-        stock: 8,
-        badge: "ยอดนิยม",
-        rating: 5.0,
-        review_count: 34,
-        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80"
+        "id": 2,
+        "name": "สร้อยคอทองคำแท้ จี้เพชรรูปหัวใจ Amour Diamond Pendant",
+        "category": "necklaces",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "เพชรแท้ (GIA)",
+        "carat": "0.35 กะรัต",
+        "price": 18500,
+        "original_price": 22900,
+        "stock": 8,
+        "badge": "ยอดนิยม",
+        "rating": 5.0,
+        "review_count": 34,
+        "image_url": "static/images/products/heart_necklace.jpg",
+        "gallery": [
+            "static/images/products/heart_necklace.jpg"
         ],
-        description: "สร้อยคอทองคำ 18K ดีไซน์โซ่เรียบหรู พร้อมจี้หัวใจประดับเพชรแท้ประกายระยิบระยับ สัญลักษณ์แห่งความรักอันบริสุทธิ์",
-        details: [
+        "description": "สร้อยคอทองคำแท้ 18K ดีไซน์โซ่เรียบหรู พร้อมจี้หัวใจประดับเพชรแท้รูปหัวใจ Heart Brilliant Cut เปล่งประกายระยิบระยับ สัญลักษณ์แห่งความรักอันบริสุทธิ์ ใส่ได้ทุกโอกาส",
+        "details": [
             "ความยาวสร้อย: 42 ซม. ปรับระดับได้ถึง 45 ซม.",
-            "เพชรแท้เบลเยี่ยมคัท น้ำหนักรวม 0.35 กะรัต น้ำ 99 (E Color)",
-            "ตัวเรือน: ทองแท้ 18K Yellow Gold"
+            "เพชรแท้ทรงหัวใจ Heart Cut 0.35 กะรัต น้ำ 99 (E Color)",
+            "ตัวเรือน: ทองแท้ 18K Yellow Gold (750)",
+            "บริการทำความสะอาดและตรวจสอบหนามเตยฟรีตลอดชีพ"
         ],
-        sizes: ["42-45 cm (Standard)"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "42-45 cm (Standard)"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 3,
-        name: "ต่างหูไข่มุกเซาท์ซีแท้ Golden South Sea Pearl Drop Earrings",
-        category: "earrings",
-        material: "ทองคำแท้ 18K",
-        gemstone: "ไข่มุกแท้ (South Sea Pearl)",
-        carat: "ไข่มุกขนาด 11-12 mm",
-        price: 24900,
-        original_price: 29500,
-        stock: 4,
-        badge: "หรูหราพรีเมียม",
-        rating: 4.8,
-        review_count: 21,
-        image_url: "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1630019852942-f89202989a59?w=800&auto=format&fit=crop&q=80"
+        "id": 3,
+        "name": "ต่างหูไข่มุกเซาท์ซีแท้ Golden South Sea Pearl Drop Earrings",
+        "category": "earrings",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "ไข่มุกแท้ (South Sea Pearl)",
+        "carat": "ไข่มุกขนาด 11-12 mm",
+        "price": 24900,
+        "original_price": 29500,
+        "stock": 4,
+        "badge": "หรูหราพรีเมียม",
+        "rating": 4.8,
+        "review_count": 21,
+        "image_url": "static/images/products/pearl_earrings.jpg",
+        "gallery": [
+            "static/images/products/pearl_earrings.jpg"
         ],
-        description: "ต่างหูไข่มุกทอง South Sea ธรรมชาติ สีทองประกายธรรมชาติ ลัสเตอร์เงางามดุจกระจก ประดับเพชรแท้ด้านบน",
-        details: [
-            "ไข่มุก South Sea ธรรมชาติ 100% ขนาด 11.5 มม.",
+        "description": "ต่างหูไข่มุกทอง South Sea ธรรมชาติ สีทองประกายแชมเปญ ลัสเตอร์เงางามดุจกระจก ประดับเพชรแท้ระยิบระยับบนก้านทองคำ 18K เพิ่มความโดดเด่นสะกดทุกสายตา",
+        "details": [
+            "ไข่มุก South Sea ธรรมชาติแท้ 100% ขนาด 11.5 มม.",
             "ประดับเพชรแท้ทรงกลมรวม 0.20 กะรัต",
-            "ตัวเรือนทองแท้ 18K สี Yellow Gold ผิวเงา"
+            "ตัวเรือนทองแท้ 18K สี Yellow Gold ผิวเงา",
+            "แป้นต่างหูระบบ Double-Lock เพื่อความปลอดภัยสูงสุด"
         ],
-        sizes: ["One Size"],
-        can_engrave: 0,
-        is_featured: 1
+        "sizes": [
+            "One Size"
+        ],
+        "can_engrave": 0,
+        "is_featured": 1
     },
     {
-        id: 4,
-        name: "สร้อยข้อมือเพชรรอบวง Classic Tennis Bracelet 18K",
-        category: "bracelets",
-        material: "ทองคำขาว 18K",
-        gemstone: "เพชรแท้ (GIA)",
-        carat: "เพชรรวม 3.50 กะรัต (52 เม็ด)",
-        price: 68000,
-        original_price: 79000,
-        stock: 3,
-        badge: "Signature",
-        rating: 5.0,
-        review_count: 19,
-        image_url: "https://images.unsplash.com/photo-1611591475102-44122d264585?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1611591475102-44122d264585?w=800&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80"
+        "id": 4,
+        "name": "สร้อยข้อมือเพชรรอบวง Classic Tennis Bracelet 18K",
+        "category": "bracelets",
+        "material": "ทองคำขาว 18K",
+        "gemstone": "เพชรแท้ (GIA)",
+        "carat": "เพชรรวม 3.50 กะรัต (52 เม็ด)",
+        "price": 68000,
+        "original_price": 79000,
+        "stock": 3,
+        "badge": "Signature",
+        "rating": 5.0,
+        "review_count": 19,
+        "image_url": "static/images/products/tennis_bracelet.jpg",
+        "gallery": [
+            "static/images/products/tennis_bracelet.jpg"
         ],
-        description: "สร้อยข้อมือเทนนิสเพชรแท้แถวเดี่ยว สัญลักษณ์ของความหรูหราขั้นสุด เพชรน้ำงามขนาดเท่ากันทุกเม็ด",
-        details: [
+        "description": "สร้อยข้อมือเทนนิสเพชรแท้แถวเดี่ยว สัญลักษณ์ของความหรูหราขั้นสุด เพชรน้ำงามขนาดเท่ากันทุกเม็ด คัดสรรเกรดพรีเมียม ร้อยเรียงอย่างสมบูรณ์แบบบนตัวเรือนทองคำขาว 18K",
+        "details": [
             "เพชรแท้ธรรมชาติ 52 เม็ด รวม 3.50 กะรัต น้ำ 98-99 (F-E Color)",
             "ตัวเรือนทองคำขาวแท้ 18K (750 White Gold)",
-            "ความยาว 16.5 ซม."
+            "ความยาว 16.5 ซม. (สั่งปรับขนาดได้)",
+            "ตัวล็อก 2 ชั้น Safety Clasp ป้องกันการหลุดหาย"
         ],
-        sizes: ["15.5 cm", "16.5 cm", "17.5 cm"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "15.5 cm",
+            "16.5 cm",
+            "17.5 cm"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 5,
-        name: "แหวนพลอยไพลินซีลอนแท้ล้อมเพชร Royal Ceylon Sapphire Ring",
-        category: "rings",
-        material: "ทองคำขาว 18K",
-        gemstone: "ไพลินแท้ (Ceylon Sapphire)",
-        carat: "ไพลิน 1.80 กะรัต + เพชร 0.45 กะรัต",
-        price: 45000,
-        original_price: 54000,
-        stock: 2,
-        badge: "อัญมณีล้ำค่า",
-        rating: 4.9,
-        review_count: 16,
-        image_url: "https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800&auto=format&fit=crop&q=80"
+        "id": 5,
+        "name": "แหวนพลอยไพลินซีลอนแท้ล้อมเพชร Royal Ceylon Sapphire Ring",
+        "category": "rings",
+        "material": "ทองคำขาว 18K",
+        "gemstone": "ไพลินแท้ (Ceylon Sapphire)",
+        "carat": "ไพลิน 1.80 กะรัต + เพชร 0.45 กะรัต",
+        "price": 45000,
+        "original_price": 54000,
+        "stock": 2,
+        "badge": "อัญมณีล้ำค่า",
+        "rating": 4.9,
+        "review_count": 16,
+        "image_url": "static/images/products/sapphire_ring.jpg",
+        "gallery": [
+            "static/images/products/sapphire_ring.jpg"
         ],
-        description: "แหวนไพลินสีน้ำเงินรอยัลบลู จากแหล่งซีลอน ล้อมรอบด้วยเพชรแท้เจียระไนแบบเหลี่ยมเกสร สไตล์เจ้าหญิง",
-        details: [
+        "description": "แหวนไพลินสีน้ำเงินรอยัลบลู (Royal Blue) จากแหล่งซีลอน ล้อมรอบด้วยเพชรแท้เจียระไนแบบเหลี่ยมเกสรและบ่าข้างเพชร ดีไซน์เจ้าหญิงสไตล์วินเทจราชวงศ์อังกฤษ",
+        "details": [
             "ไพลินแท้ธรรมชาติ สี Royal Blue หนัก 1.80 กะรัต",
-            "เพชรแท้ล้อมวงและบ่าข้าง รวม 0.45 กะรัต น้ำ 99"
+            "เพชรแท้ล้อมวงและบ่าข้าง รวม 0.45 กะรัต น้ำ 99",
+            "ตัวเรือนทองคำขาว 18K น้ำหนักประมาณ 4.8 กรัม",
+            "มีใบรับรองอัญมณีแท้จากสถาบันตรวจสอบอัญมณี"
         ],
-        sizes: ["50", "52", "54", "56"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "50",
+            "52",
+            "54",
+            "56"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 6,
-        name: "จี้มรกตโคลัมเบียแท้ล้อมเพชร Colombian Emerald Pendant 18K",
-        category: "necklaces",
-        material: "ทองคำแท้ 18K",
-        gemstone: "มรกตแท้ (Emerald)",
-        carat: "มรกต 1.25 กะรัต + เพชร 0.30 กะรัต",
-        price: 38900,
-        original_price: 45000,
-        stock: 3,
-        badge: "คอลเลกชันใหม่",
-        rating: 5.0,
-        review_count: 12,
-        image_url: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&auto=format&fit=crop&q=80"
+        "id": 6,
+        "name": "จี้มรกตโคลัมเบียแท้ล้อมเพชร Colombian Emerald Pendant 18K",
+        "category": "necklaces",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "มรกตแท้ (Emerald)",
+        "carat": "มรกต 1.25 กะรัต + เพชร 0.30 กะรัต",
+        "price": 38900,
+        "original_price": 45000,
+        "stock": 3,
+        "badge": "คอลเลกชันใหม่",
+        "rating": 5.0,
+        "review_count": 12,
+        "image_url": "static/images/products/emerald_pendant.jpg",
+        "gallery": [
+            "static/images/products/emerald_pendant.jpg"
         ],
-        description: "จี้มรกตโคลัมเบียสีเขียวเข้มสดใส ทรงหยดน้ำ ล้อมรอบด้วยเพชรแท้เปล่งประกาย ตัวเรือนทองคำแท้ 18K",
-        details: [
+        "description": "จี้มรกตโคลัมเบียสีเขียวเข้มสดใส (Vivid Green) ทรงหยดน้ำ Pear Cut ล้อมรอบด้วยเพชรแท้เปล่งประกาย ตัวเรือนทองคำแท้ 18K เสริมบารมีและความสง่างาม",
+        "details": [
             "มรกตธรรมชาติแท้แหล่งโคลัมเบีย 1.25 กะรัต ทรง Pear Cut",
-            "เพชรแท้ล้อม 2 ชั้น น้ำ 99 รวม 0.30 กะรัต"
+            "เพชรแท้ล้อม 1 ชั้นและห่วงคล้อง น้ำ 99 รวม 0.30 กะรัต",
+            "ตัวเรือนทองคำแท้ 18K Yellow Gold พร้อมห่วงคล้องสร้อย",
+            "ใบเซอร์รับรองจากสถาบันอัญมณีสากล"
         ],
-        sizes: ["One Size (พร้อมสายสร้อย 18K 45 cm)"],
-        can_engrave: 1,
-        is_featured: 0
+        "sizes": [
+            "One Size (พร้อมสายสร้อย 18K 45 cm)"
+        ],
+        "can_engrave": 1,
+        "is_featured": 0
     },
     {
-        id: 7,
-        name: "กำไลข้อมือทองคำแท้ 18K ดีไซน์เกลียวเพชร Aurora Spiral Bangle",
-        category: "bracelets",
-        material: "พิงก์โกลด์ 18K",
-        gemstone: "เพชรแท้",
-        carat: "0.40 กะรัต",
-        price: 39500,
-        original_price: 46000,
-        stock: 6,
-        badge: "ยอดนิยม",
-        rating: 4.9,
-        review_count: 27,
-        image_url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&auto=format&fit=crop&q=80"
+        "id": 7,
+        "name": "กำไลข้อมือทองคำแท้ 18K ดีไซน์ใบไม้เกลียว Flora Aurora Bangle",
+        "category": "bracelets",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "ทองคำแท้ 18K",
+        "carat": "ทองแท้ 18K น้ำหนัก 8.5 กรัม",
+        "price": 39500,
+        "original_price": 46000,
+        "stock": 6,
+        "badge": "ยอดนิยม",
+        "rating": 4.9,
+        "review_count": 27,
+        "image_url": "static/images/products/bangle_bracelet.jpg",
+        "gallery": [
+            "static/images/products/bangle_bracelet.jpg"
         ],
-        description: "กำไลทองชมพู Rose Gold 18K ดีไซน์รูปทรงคลื่นเกลียวทันสมัย ปลายกำไลฝังเพชรแท้ทรงกลม",
-        details: [
-            "ทองคำแท้ 18K Rose Gold น้ำหนัก 9.2 กรัม",
-            "เพชรแท้คัดเกรด Heart & Arrow รวม 0.40 กะรัต"
+        "description": "กำไลทองคำแท้ 18K ดีไซน์รูปทรงใบไม้เกลียวพริ้วไหว Flora Aurora สไตล์มินิมอลลักชูรี เส้นสายทองคำขึ้นรูปประณีต สวมใส่ง่าย โอบกระชับข้อมืออย่างสง่างาม",
+        "details": [
+            "ทองคำแท้ 18K Yellow Gold น้ำหนัก 8.5 กรัม",
+            "ดีไซน์รูปทรงใบไม้บายพาสเกลียวโมเดิร์น",
+            "เส้นผ่านศูนย์กลางภายใน 5.8 ซม. เหมาะกับข้อมือ 14 - 17 ซม.",
+            "สลักชื่อเลเซอร์ข้อความพิเศษด้านในกำไลได้ฟรี"
         ],
-        sizes: ["S (14-15 cm)", "M (15.5-16.5 cm)", "L (17-18 cm)"],
-        can_engrave: 1,
-        is_featured: 0
+        "sizes": [
+            "S (14-15 cm)",
+            "M (15.5-16.5 cm)",
+            "L (17-18 cm)"
+        ],
+        "can_engrave": 1,
+        "is_featured": 0
     },
     {
-        id: 8,
-        name: "ต่างหูห่วงเพชรแท้รอบวง Diamond Huggie Hoop Earrings",
-        category: "earrings",
-        material: "ทองคำขาว 18K",
-        gemstone: "เพชรแท้",
-        carat: "0.55 กะรัต",
-        price: 21900,
-        original_price: 26000,
-        stock: 9,
-        badge: "Must Have",
-        rating: 4.8,
-        review_count: 42,
-        image_url: "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=800&auto=format&fit=crop&q=80"
+        "id": 8,
+        "name": "ต่างหูห่วงเพชรแท้รอบวง Diamond Huggie Hoop Earrings",
+        "category": "earrings",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "เพชรแท้",
+        "carat": "0.55 กะรัต",
+        "price": 21900,
+        "original_price": 26000,
+        "stock": 9,
+        "badge": "Must Have",
+        "rating": 4.8,
+        "review_count": 42,
+        "image_url": "static/images/products/hoop_earrings.jpg",
+        "gallery": [
+            "static/images/products/hoop_earrings.jpg"
         ],
-        description: "ต่างหูห่วงเพชรแท้ดีไซน์ Huggie แนบกระชับใบหู ฝังเพชรทั้งด้านนอกและด้านใน เปล่งประกายรอบทิศทาง",
-        details: [
-            "เพชรแท้กลม 28 เม็ด รวม 0.55 กะรัต น้ำ 99 E Color",
-            "ตัวเรือนทองคำขาว 18K ระบบตัวล็อกคลิกแน่นหนา"
+        "description": "ต่างหูห่วงเพชรแท้ดีไซน์ Huggie แนบกระชับใบหู ฝังเพชรแท้ทรงกลมและบาแก็ตต์ เปล่งประกายรอบทิศทาง ใส่ติดหูได้ทุกวันโดยไม่เกะกะ",
+        "details": [
+            "เพชรแท้กลมและบาแก็ตต์ รวม 0.55 กะรัต น้ำ 99 E Color",
+            "ตัวเรือนทองแท้ 18K Yellow Gold ระบบตัวล็อกคลิกแน่นหนา",
+            "ขนาดเส้นผ่านศูนย์กลาง 14 มิลลิเมตร",
+            "ไม่ก่อให้เกิดการระคายเคือง (Nickel Free 100%)"
         ],
-        sizes: ["One Size (14 mm)"],
-        can_engrave: 0,
-        is_featured: 0
+        "sizes": [
+            "One Size (14 mm)"
+        ],
+        "can_engrave": 0,
+        "is_featured": 0
     },
     {
-        id: 9,
-        name: "เซ็ตเครื่องประดับเจ้าสาว Rose Gold Bridal Elegance Set",
-        category: "bridal",
-        material: "พิงก์โกลด์ 18K",
-        gemstone: "เพชรแท้",
-        carat: "เพชรรวม 2.20 กะรัต",
-        price: 89000,
-        original_price: 105000,
-        stock: 2,
-        badge: "ชุดพิเศษงานวิวาห์",
-        rating: 5.0,
-        review_count: 9,
-        image_url: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&auto=format&fit=crop&q=80"
+        "id": 9,
+        "name": "เซ็ตเครื่องประดับเจ้าสาว Rose Gold Bridal Elegance Set",
+        "category": "bridal",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "ทองคำแท้ 18K",
+        "carat": "ทองแท้ 18K น้ำหนักรวม 28.5 กรัม",
+        "price": 89000,
+        "original_price": 105000,
+        "stock": 2,
+        "badge": "ชุดพิเศษงานวิวาห์",
+        "rating": 5.0,
+        "review_count": 9,
+        "image_url": "static/images/products/bridal_set.jpg",
+        "gallery": [
+            "static/images/products/bridal_set.jpg"
         ],
-        description: "เซ็ตเจ้าสาวสุดหรูหรา ประกอบด้วยสร้อยคอเพชร ต่างหูระย้า และแหวนคู่เพชรแท้ เข้าชุดในโทนสีพิงก์โกลด์",
-        details: [
-            "ประกอบด้วย: สร้อยคอ + ต่างหูระย้า + แหวนเพชร",
-            "เพชรแท้รวมทั้งเซ็ต 2.20 กะรัต น้ำ 100-99 (D-E Color)"
+        "description": "เซ็ตเจ้าสาวสุดหรูหรา ประกอบด้วยสร้อยคอทองคำแท้ลวดลายตาข่ายวิจิตรบรรจง และต่างหูระย้าเข้าชุด สมเกียรติในวันวิวาห์และโอกาสสำคัญที่สุด",
+        "details": [
+            "ประกอบด้วย: สร้อยคอทองคำลวดลายวิจิตร + ต่างหูระย้า 1 คู่",
+            "ตัวเรือนทองคำแท้ 18K น้ำหนักรวม 28.5 กรัม",
+            "งานขึ้นรูปมือช่างทองหลวงชั้นสูง ละเอียดทุกข้อต่อ",
+            "แถมฟรี: กล่องกำมะหยี่เซ็ตใหญ่สั่งทำพิเศษ พร้อมชุดทำความสะอาด"
         ],
-        sizes: ["Custom Ring Size"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "One Size (Bridal Set)"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 10,
-        name: "แหวนทับทิมสยามล้อมเพชร Siam Ruby & Diamond Halo Ring",
-        category: "rings",
-        material: "ทองคำแท้ 18K",
-        gemstone: "ทับทิมแท้ (Pigeon's Blood)",
-        carat: "ทับทิม 2.05 กะรัต + เพชร 0.50 กะรัต",
-        price: 52000,
-        original_price: 63000,
-        stock: 3,
-        badge: "อัญมณีมงคล",
-        rating: 4.9,
-        review_count: 14,
-        image_url: "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=800&auto=format&fit=crop&q=80"
+        "id": 10,
+        "name": "แหวนทับทิมสยามล้อมเพชร Siam Ruby & Diamond Halo Ring",
+        "category": "rings",
+        "material": "ทองคำแท้ 18K",
+        "gemstone": "ทับทิมแท้ (Pigeon's Blood)",
+        "carat": "ทับทิม 2.05 กะรัต + เพชร 0.50 กะรัต",
+        "price": 52000,
+        "original_price": 63000,
+        "stock": 3,
+        "badge": "อัญมณีมงคล",
+        "rating": 4.9,
+        "review_count": 14,
+        "image_url": "static/images/products/ruby_ring.jpg",
+        "gallery": [
+            "static/images/products/ruby_ring.jpg"
         ],
-        description: "แหวนทับทิมแท้สีเลือดนกพิราบ สีแดงสดสะกดสายตา ล้อมรอบด้วยเพชรแท้น้ำ 99 สองชั้น",
-        details: [
+        "description": "แหวนทับทิมแท้สีเลือดนกพิราบ (Pigeon's Blood) สีแดงสดสะกดสายตา อัญมณีแห่งความรักและอำนาจบารมี ล้อมรอบด้วยเพชรแท้น้ำ 99 สองชั้น",
+        "details": [
             "ทับทิมแท้ธรรมชาติรูปไข่ Oval Cut ขนาด 2.05 กะรัต",
-            "เพชรแท้ล้อมรอบและก้านแหวน รวม 0.50 กะรัต"
+            "เพชรแท้ล้อมรอบและก้านแหวน รวม 0.50 กะรัต",
+            "ตัวเรือนทองคำแท้ 18K Yellow Gold ประณีต",
+            "ใบเซอร์รับรองจากสถาบัน GIT (สถาบันวิจัยและพัฒนาอัญมณีแห่งชาติ)"
         ],
-        sizes: ["50", "52", "54", "56", "58"],
-        can_engrave: 1,
-        is_featured: 0
+        "sizes": [
+            "50",
+            "52",
+            "54",
+            "56",
+            "58"
+        ],
+        "can_engrave": 1,
+        "is_featured": 0
     },
     {
-        id: 11,
-        name: "แหวนเพชรรอบวง Eternity Diamond Band 18K",
-        category: "rings",
-        material: "ทองคำแท้ 18K",
-        gemstone: "เพชรแท้",
-        carat: "0.85 กะรัต",
-        price: 27500,
-        original_price: 32000,
-        stock: 7,
-        badge: "ยอดนิยม",
-        rating: 4.9,
-        review_count: 31,
-        image_url: "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&auto=format&fit=crop&q=80"
+        "id": 11,
+        "name": "แหวนเพชรรอบวง Eternity Diamond Band 18K",
+        "category": "rings",
+        "material": "ทองคำขาว 18K",
+        "gemstone": "เพชรแท้",
+        "carat": "0.85 กะรัต",
+        "price": 27500,
+        "original_price": 32000,
+        "stock": 7,
+        "badge": "ยอดนิยม",
+        "rating": 4.9,
+        "review_count": 31,
+        "image_url": "static/images/products/eternity_band.jpg",
+        "gallery": [
+            "static/images/products/eternity_band.jpg"
         ],
-        description: "แหวนเพชรรอบวงแบบ Full Eternity สัญลักษณ์แห่งความรักที่ไม่มีวันสิ้นสุด ฝังเพชรแท้เรียงชิดติดกันรอบวง",
-        details: [
+        "description": "แหวนเพชรรอบวงแบบ Full Eternity สัญลักษณ์แห่งความรักที่ไม่มีวันสิ้นสุด ฝังเพชรแท้เรียงชิดติดกันรอบวง ใส่เดี่ยวหรือซ้อนคู่กับแหวนเม็ดเดี่ยวได้อย่างลงตัว",
+        "details": [
             "เพชรแท้ธรรมชาติฝังรอบวง รวม 0.85 กะรัต น้ำ 99 E Color",
-            "ตัวเรือนทองคำแท้ 18K Yellow Gold"
+            "ตัวเรือนทองคำขาวแท้ 18K White Gold",
+            "ออกแบบให้สวมใส่สบาย ไม่ขูดขีดนิ้วข้างเคียง",
+            "รับประกันเพชรแท้ตลอดอายุการใช้งาน"
         ],
-        sizes: ["48", "50", "52", "54", "56"],
-        can_engrave: 1,
-        is_featured: 1
+        "sizes": [
+            "48",
+            "50",
+            "52",
+            "54",
+            "56"
+        ],
+        "can_engrave": 1,
+        "is_featured": 1
     },
     {
-        id: 12,
-        name: "สร้อยคอเงินแท้ 925 ชุบทองคำขาว จี้คริสตัลหยดน้ำ Grace Pendant",
-        category: "necklaces",
-        material: "เงินแท้ 925",
-        gemstone: "คริสตัลสวิสเกรด 5A",
-        carat: "เทียบเท่า 1.0 กะรัต",
-        price: 2890,
-        original_price: 3800,
-        stock: 20,
-        badge: "ราคาเข้าถึงง่าย",
-        rating: 4.7,
-        review_count: 55,
-        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
-        gallery: [
-            "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80"
+        "id": 12,
+        "name": "สร้อยคอเงินแท้ 925 ชุบทองคำขาว จี้คริสตัลหยดน้ำ Grace Pendant",
+        "category": "necklaces",
+        "material": "เงินแท้ 925",
+        "gemstone": "คริสตัลสวิสเกรด 5A",
+        "carat": "เทียบเท่า 1.0 กะรัต",
+        "price": 2890,
+        "original_price": 3800,
+        "stock": 20,
+        "badge": "ราคาเข้าถึงง่าย",
+        "rating": 4.7,
+        "review_count": 55,
+        "image_url": "static/images/products/crystal_pendant.jpg",
+        "gallery": [
+            "static/images/products/crystal_pendant.jpg",
+            "static/images/products/crystal_pendant_model.jpg"
         ],
-        description: "สร้อยคอเงินแท้ 925 สเตอร์ลิง ชุบทองคำขาวหนาพิเศษ จี้ทรงหยดน้ำคริสตัลเกรด 5A สะท้อนแสงวิบวับ",
-        details: [
+        "description": "สร้อยคอเงินแท้ 925 สเตอร์ลิง ชุบทองคำขาวหนาพิเศษ ป้องกันการหมองคล้ำ จี้ทรงหยดน้ำคริสตัลเกรด 5A เหลี่ยมคมชัดสะท้อนแสงวิบวับ เหมาะเป็นของขวัญพิเศษ",
+        "details": [
             "เงินแท้ 925 ชุบ White Gold ไม่ลอกไม่ดำง่าย",
-            "คริสตัลสวิสเกรด 5A ทรง Teardrop"
+            "คริสตัลสวิสเกรด 5A ทรง Teardrop",
+            "ความยาวสายสร้อย 40 + 5 ซม. ข้อต่อเสริม",
+            "บรรจุกล่องของขวัญพร้อมริบบิ้นสุดน่ารัก"
         ],
-        sizes: ["40-45 cm"],
-        can_engrave: 0,
-        is_featured: 0
+        "sizes": [
+            "40-45 cm"
+        ],
+        "can_engrave": 0,
+        "is_featured": 0
     }
 ];
 
