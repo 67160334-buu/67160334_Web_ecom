@@ -90,12 +90,22 @@ def run_tests():
     assert order_res["order_number"].startswith("FRM-")
     print(f"  [+] Customer order created: {order_res['order_number']} | Tracking: {order_res['tracking_number']}")
 
-    # 8. Test Customer Order Tracking by Order Number
+    # 8. Test Customer Order Tracking by Order Number, Phone, and Tracking Code
     res = client.get(f"/api/orders/{order_res['order_number']}")
     assert res.status_code == 200
     track_data = res.get_json()
     assert track_data["order"]["customer_phone"] == "089-123-4567"
-    print(f"  [+] Customer order tracking verified: status is '{track_data['order']['order_status']}'")
+
+    # 8b. Tracking by Phone Number
+    res_phone = client.get("/api/orders/089-123-4567")
+    assert res_phone.status_code == 200
+    assert res_phone.get_json()["success"] is True
+
+    # 8c. Tracking by Tracking Number
+    res_track = client.get(f"/api/orders/{order_res['tracking_number']}")
+    assert res_track.status_code == 200
+    assert res_track.get_json()["success"] is True
+    print(f"  [+] Customer order tracking verified via Order ID, Phone, and Tracking: status is '{track_data['order']['order_status']}'")
 
     # ========================================================
     # SECURITY & SEPARATION TESTS: USER VS ADMIN ACCESS

@@ -26,7 +26,12 @@
             <div class="flex-1 md:flex-none text-center">
                 จัดส่งฟรีทั่วประเทศเมื่อสั่งซื้อครบ 2,000.- | บริการสลักชื่อเลเซอร์ฟรี | โค้ดส่วนลด 10%: <strong class="text-neutral-900 cursor-pointer underline" onclick="navigator.clipboard.writeText('WELCOME10'); showToast('คัดลอกโค้ด WELCOME10 แล้ว', 'success');">WELCOME10</strong>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openOrderTrackingModal()" class="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-800 hover:text-black py-0.5 px-2.5 rounded-full bg-neutral-100 hover:bg-neutral-200 transition" title="ติดตามสถานะคำสั่งซื้อ & พัสดุ">
+                    <i class="fa-solid fa-truck-fast text-[10px]"></i>
+                    <span>ติดตามพัสดุ</span>
+                </button>
+                <span class="text-neutral-300 hidden md:inline">|</span>
                 <span class="hidden md:inline text-[11px] text-neutral-500">
                     LINE: @forme.jewelry
                 </span>
@@ -66,9 +71,9 @@
                 <!-- Navigation Actions -->
                 <div class="flex items-center gap-1 sm:gap-3 text-neutral-700">
                     <!-- Order Tracking Button -->
-                    <button onclick="openOrderTrackingModal()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs hover:text-black hover:bg-neutral-100 transition" title="ติดตามพัสดุ">
-                        <i class="fa-solid fa-truck-fast text-xs"></i>
-                        <span class="font-light">ติดตามพัสดุ</span>
+                    <button onclick="openOrderTrackingModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-light text-neutral-800 hover:text-black hover:bg-neutral-100 transition border border-neutral-200 shadow-sm" title="ติดตามสถานะคำสั่งซื้อ & พัสดุ">
+                        <i class="fa-solid fa-truck-fast text-xs text-neutral-600"></i>
+                        <span class="hidden sm:inline font-medium">ติดตามพัสดุ</span>
                     </button>
 
                     <!-- Wishlist Button -->
@@ -745,40 +750,85 @@
                     </div>
                 </div>
 
-                <div class="flex gap-2">
-                    <button onclick="window.print()" class="flex-1 py-2 rounded-full border border-neutral-300 text-neutral-800 text-xs hover:border-black transition">
-                        พิมพ์ใบเสร็จ
+                <div class="space-y-2 mt-4">
+                    <button id="successTrackNowBtn" class="w-full py-2.5 rounded-full bg-neutral-900 text-white text-xs hover:bg-black transition flex items-center justify-center gap-2 shadow-sm font-medium">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>ติดตามสถานะคำสั่งซื้อนี้ทันที</span>
                     </button>
-                    <button onclick="closeOrderSuccessModal()" class="flex-1 py-2 rounded-full bg-neutral-900 text-white text-xs hover:bg-black transition">
-                        เสร็จสิ้น
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="window.print()" class="flex-1 py-2 rounded-full border border-neutral-300 text-neutral-800 text-xs hover:border-black transition">
+                            <i class="fa-solid fa-print mr-1"></i> พิมพ์ใบเสร็จ
+                        </button>
+                        <button onclick="closeOrderSuccessModal()" class="flex-1 py-2 rounded-full bg-neutral-100 text-neutral-700 text-xs hover:bg-neutral-200 transition">
+                            ปิดหน้าต่าง
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Order Tracking Modal (Minimal) -->
+    <!-- Order Tracking Modal (VIP Luxury) -->
     <div id="orderTrackingModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
-            <div onclick="closeOrderTrackingModal()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="min-h-screen px-4 text-center flex items-center justify-center p-2 sm:p-4">
+            <div onclick="closeOrderTrackingModal()" class="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
             
-            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-lg w-full my-8 text-left shadow-xl z-10">
-                <button onclick="closeOrderTrackingModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-black">
-                    <i class="fa-solid fa-xmark text-base"></i>
+            <div class="relative bg-white border border-neutral-200 rounded-3xl p-6 sm:p-8 max-w-2xl w-full my-8 text-left shadow-2xl z-10 overflow-hidden">
+                <!-- Close Button -->
+                <button onclick="closeOrderTrackingModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500 hover:text-black flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
 
-                <h3 class="text-xl font-serif text-neutral-900 mb-1">ติดตามสถานะคำสั่งซื้อ</h3>
-                <p class="text-xs text-neutral-500 mb-4 font-light">ค้นหาด้วยหมายเลขคำสั่งซื้อ (เช่น FRM-2026...) หรือเบอร์โทรศัพท์</p>
-
-                <div class="flex gap-2">
-                    <input type="text" id="trackOrderInput" placeholder="หมายเลขคำสั่งซื้อ หรือ เบอร์โทรศัพท์" 
-                        class="flex-1 bg-neutral-50 border border-neutral-200 rounded-lg px-3.5 py-2 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900">
-                    <button onclick="trackOrderModal()" class="px-5 py-2 rounded-lg bg-neutral-900 text-white text-xs hover:bg-black transition">
-                        ค้นหา
-                    </button>
+                <!-- Modal Header -->
+                <div class="mb-6">
+                    <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-neutral-100 text-neutral-600 text-[10px] font-medium tracking-wider uppercase mb-2">
+                        <i class="fa-solid fa-shield-halved text-[9px]"></i>
+                        <span>FORME VIP Concierge & Logistics</span>
+                    </div>
+                    <h3 class="text-2xl font-serif text-neutral-900 tracking-wide">ติดตามสถานะสินค้า & พัสดุ</h3>
+                    <p class="text-xs text-neutral-500 mt-1 font-light">ตรวจสอบขั้นตอนการรังสรรค์จิวเวลรี่ ตรวจสอบใบเซอร์ GIA และการจัดส่งแบบเรียลไทม์</p>
                 </div>
 
-                <div id="trackingResultContainer"></div>
+                <!-- Search Input Bar -->
+                <div class="space-y-3">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
+                            <input type="text" id="trackOrderInput" placeholder="กรอกเลขคำสั่งซื้อ (FRM-...), เลขพัสดุ (THP...) หรือเบอร์โทรศัพท์" 
+                                class="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 pl-10 text-xs text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 focus:bg-white transition font-light shadow-sm">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                        </div>
+                        <button onclick="trackOrderModal()" class="px-5 sm:px-6 py-3 rounded-xl bg-neutral-900 text-white text-xs hover:bg-black transition flex items-center gap-2 font-medium tracking-wide shadow-sm flex-shrink-0">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            <span class="hidden sm:inline">ตรวจสอบ</span>
+                        </button>
+                    </div>
+
+                    <!-- Quick Demo Chips -->
+                    <div class="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] text-neutral-500 font-light">
+                        <span class="text-neutral-400 text-[10px] uppercase tracking-wider">คลิกเพื่อทดสอบ:</span>
+                        <button type="button" onclick="fillTrackingDemo('FRM-20261022-3023')" class="px-2.5 py-1 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition text-[11px] border border-neutral-200/60">
+                            🚚 อยู่ระหว่างจัดส่ง
+                        </button>
+                        <button type="button" onclick="fillTrackingDemo('FRM-20261022-1450')" class="px-2.5 py-1 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition text-[11px] border border-neutral-200/60">
+                            💎 ตรวจ GIA & QC
+                        </button>
+                        <button type="button" onclick="fillTrackingDemo('FRM-20261021-5685')" class="px-2.5 py-1 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition text-[11px] border border-neutral-200/60">
+                            📦 จัดเตรียมสินค้า
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Orders on This Device -->
+                <div id="recentOrdersSection" class="mt-5 pt-4 border-t border-neutral-100 hidden">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-[11px] font-medium text-neutral-500 uppercase tracking-wider">คำสั่งซื้อล่าสุดของคุณบนอุปกรณ์นี้</span>
+                        <span class="text-[10px] text-neutral-400 font-light">บันทึกอัตโนมัติ</span>
+                    </div>
+                    <div id="recentOrdersList" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                </div>
+
+                <!-- Tracking Result Container -->
+                <div id="trackingResultContainer" class="mt-5"></div>
             </div>
         </div>
     </div>

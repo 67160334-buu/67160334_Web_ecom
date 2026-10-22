@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initApp() {
+    initDefaultOrders();
     updateCartCount();
     updateWishlistCount();
     await fetchProducts();
@@ -1319,6 +1320,26 @@ async function processOrderSubmit(event) {
                 localStorage.removeItem('forme_coupon');
                 updateCartCount();
 
+                // Save to local storage history for device tracking
+                const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+                const newRecord = {
+                    order_number: data.order_number,
+                    tracking_number: data.tracking_number,
+                    total: data.total || subtotal,
+                    order_status: data.order_status || 'processing',
+                    payment_status: ['promptpay', 'card'].includes(paymentMethod) ? 'paid' : 'pending',
+                    created_at: new Date().toISOString(),
+                    items: payload.items || [],
+                    customer_name: payload.customer_name,
+                    customer_phone: payload.customer_phone,
+                    shipping_address: payload.shipping_address,
+                    province: payload.province,
+                    postal_code: payload.postal_code,
+                    ...payload
+                };
+                savedOrders.unshift(newRecord);
+                localStorage.setItem('forme_orders', JSON.stringify(savedOrders));
+
                 showOrderSuccessModal(data, payload);
                 return;
             }
@@ -1334,6 +1355,13 @@ async function processOrderSubmit(event) {
         total: Math.max(0, subtotal - discountAmount + (subtotal >= 2000 ? 0 : 100)),
         order_status: 'processing',
         payment_status: ['promptpay', 'card'].includes(paymentMethod) ? 'paid' : 'pending',
+        created_at: new Date().toISOString(),
+        items: payload.items || [],
+        customer_name: payload.customer_name,
+        customer_phone: payload.customer_phone,
+        shipping_address: payload.shipping_address,
+        province: payload.province,
+        postal_code: payload.postal_code,
         ...payload
     };
     const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
@@ -1350,16 +1378,248 @@ async function processOrderSubmit(event) {
     showOrderSuccessModal(staticOrder, payload);
 }
 
+// Default Demo Orders for Instant User Testing & Tracking
+const DEFAULT_DEMO_ORDERS = [
+    {
+        id: 101,
+        order_number: 'FRM-20261022-3023',
+        tracking_number: 'THP99887766TH',
+        customer_name: 'คุณณัฐพร ภัทรเดชากุล',
+        customer_phone: '089-123-4567',
+        customer_email: 'nattaporn.p@gmail.com',
+        shipping_address: '88/12 อาคารพาร์คเวนเชอร์ อีโคเพล็กซ์ ถ.วิทยุ แขวงลุมพินี เขตปทุมวัน',
+        province: 'กรุงเทพมหานคร',
+        postal_code: '10330',
+        order_status: 'shipped',
+        payment_status: 'paid',
+        payment_method: 'credit_card',
+        created_at: '2026-10-21T09:30:00Z',
+        subtotal: 35900,
+        discount: 3590,
+        shipping_fee: 0,
+        total: 32310,
+        carrier: 'Kerry Express VIP (พัสดุคุ้มครองมูลค่าสูง)',
+        items: [
+            {
+                id: 1,
+                name: 'แหวนเพชรแท้ Solitaire Eternal Brilliance 18K',
+                price: 35900,
+                qty: 1,
+                size: '52',
+                engraving: 'FOREVER & ALWAYS 🤍',
+                image_url: 'static/images/products/solitaire_ring.jpg'
+            }
+        ]
+    },
+    {
+        id: 102,
+        order_number: 'FRM-20261022-1450',
+        tracking_number: 'THP44332211TH',
+        customer_name: 'คุณพัชราภา เลิศวรวัฒน์',
+        customer_phone: '081-998-8776',
+        customer_email: 'patcharapa.l@hotmail.com',
+        shipping_address: '45/8 หมู่บ้านพฤกษาวิลเลจ ถ.สุขุมวิท ต.แสนสุข อ.เมือง',
+        province: 'ชลบุรี',
+        postal_code: '20130',
+        order_status: 'quality_check',
+        payment_status: 'paid',
+        payment_method: 'promptpay',
+        created_at: '2026-10-22T08:15:00Z',
+        subtotal: 39500,
+        discount: 3950,
+        shipping_fee: 0,
+        total: 35550,
+        carrier: 'ไปรษณีย์ไทย EMS (ประกันภัยอัญมณีแท้)',
+        items: [
+            {
+                id: 6,
+                name: 'ต่างหูไข่มุกเซาท์ซีแท้ Golden South Sea Pearl Drop Earrings',
+                price: 39500,
+                qty: 1,
+                size: 'มาตรฐาน',
+                engraving: '',
+                image_url: 'static/images/products/pearl_earrings.jpg'
+            }
+        ]
+    },
+    {
+        id: 103,
+        order_number: 'FRM-20261021-5685',
+        tracking_number: 'THP778013849TH',
+        customer_name: 'คุณกิตติศักดิ์ เจริญพร',
+        customer_phone: '086-554-4332',
+        customer_email: 'kittisak.c@yahoo.com',
+        shipping_address: '120/5 ถ.มิตรภาพ ต.ในเมือง อ.เมือง',
+        province: 'ขอนแก่น',
+        postal_code: '40000',
+        order_status: 'preparing',
+        payment_status: 'paid',
+        payment_method: 'promptpay',
+        created_at: '2026-10-21T14:20:00Z',
+        subtotal: 58000,
+        discount: 5800,
+        shipping_fee: 0,
+        total: 52200,
+        carrier: 'Kerry Express VIP Delivery',
+        items: [
+            {
+                id: 5,
+                name: 'จี้มรกตโคลัมเบียแท้ล้อมเพชร Colombian Emerald Pendant 18K',
+                price: 58000,
+                qty: 1,
+                size: 'สายยาว 45 ซม.',
+                engraving: 'FOR MY QUEEN',
+                image_url: 'static/images/products/emerald_pendant.jpg'
+            }
+        ]
+    }
+];
+
+function initDefaultOrders() {
+    try {
+        const existing = localStorage.getItem('forme_orders');
+        if (!existing || JSON.parse(existing).length === 0) {
+            localStorage.setItem('forme_orders', JSON.stringify(DEFAULT_DEMO_ORDERS));
+        }
+    } catch (e) {}
+}
+
+function formatOrderDate(dateString) {
+    if (!dateString) return 'เร็วๆ นี้';
+    try {
+        const d = new Date(dateString);
+        if (isNaN(d.getTime())) return dateString;
+        return d.toLocaleDateString('th-TH', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        return dateString;
+    }
+}
+
+function calculateMilestoneTime(baseDate, hoursToAdd) {
+    try {
+        const d = new Date(baseDate || Date.now());
+        if (isNaN(d.getTime())) return 'กำลังดำเนินการ';
+        d.setHours(d.getHours() + hoursToAdd);
+        return d.toLocaleDateString('th-TH', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (e) {
+        return 'กำลังดำเนินการ';
+    }
+}
+
+function getOrderStatusBadge(status) {
+    switch (status) {
+        case 'preparing':
+            return { label: 'เตรียมสินค้า & สลักชื่อ', bg: 'bg-amber-100', text: 'text-amber-800', dot: 'bg-amber-500' };
+        case 'quality_check':
+            return { label: 'ตรวจสอบ GIA & QC', bg: 'bg-sky-100', text: 'text-sky-800', dot: 'bg-sky-500' };
+        case 'shipped':
+            return { label: 'อยู่ระหว่างจัดส่ง', bg: 'bg-indigo-100', text: 'text-indigo-800', dot: 'bg-indigo-500' };
+        case 'delivered':
+            return { label: 'จัดส่งสำเร็จ', bg: 'bg-emerald-100', text: 'text-emerald-800', dot: 'bg-emerald-500' };
+        case 'cancelled':
+            return { label: 'ยกเลิกคำสั่งซื้อ', bg: 'bg-rose-100', text: 'text-rose-800', dot: 'bg-rose-500' };
+        case 'processing':
+        default:
+            return { label: 'รับคำสั่งซื้อแล้ว', bg: 'bg-neutral-200', text: 'text-neutral-800', dot: 'bg-neutral-500' };
+    }
+}
+
+function copyTrackingCode(trackingCode) {
+    if (!trackingCode) return;
+    navigator.clipboard.writeText(trackingCode).then(() => {
+        showToast(`คัดลอกเลขพัสดุ ${trackingCode} เรียบร้อยแล้ว`, 'success');
+    }).catch(() => {
+        showToast(`หมายเลขพัสดุ: ${trackingCode}`, 'info');
+    });
+}
+
+function fillTrackingDemo(ref) {
+    const input = document.getElementById('trackOrderInput');
+    if (input) input.value = ref;
+    trackOrderModal(ref);
+}
+
+function renderRecentOrdersList() {
+    const section = document.getElementById('recentOrdersSection');
+    const list = document.getElementById('recentOrdersList');
+    if (!section || !list) return;
+
+    let savedOrders = [];
+    try {
+        savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+    } catch (e) {}
+
+    if (!savedOrders || savedOrders.length === 0) {
+        section.classList.add('hidden');
+        return;
+    }
+
+    section.classList.remove('hidden');
+    list.innerHTML = savedOrders.slice(0, 3).map(o => {
+        const badgeInfo = getOrderStatusBadge(o.order_status);
+        const dateStr = formatOrderDate(o.created_at);
+        const itemCount = (o.items || []).reduce((sum, it) => sum + (it.qty || 1), 0);
+        return `
+            <div onclick="fillTrackingDemo('${o.order_number}')" 
+                class="group p-3 rounded-xl bg-neutral-50 hover:bg-neutral-100/90 border border-neutral-200/80 cursor-pointer transition flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white border border-neutral-200 flex items-center justify-center text-neutral-700 text-xs shadow-sm">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono font-medium text-xs text-neutral-900 group-hover:underline">${o.order_number}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full ${badgeInfo.bg} ${badgeInfo.text} font-medium">
+                                ${badgeInfo.label}
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-neutral-400 mt-0.5 font-light">
+                            ${dateStr} • ${itemCount} ชิ้น • ฿${(o.total || 0).toLocaleString()}
+                        </p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-neutral-600 group-hover:text-black font-medium flex items-center gap-1">
+                        ติดตาม <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 // Show Order Success Modal & Receipt
 function showOrderSuccessModal(orderData, customerData) {
     const modal = document.getElementById('orderSuccessModal');
     if (!modal) return;
 
-    document.getElementById('successOrderNumber').innerText = orderData.order_number;
-    document.getElementById('successTrackingNumber').innerText = orderData.tracking_number;
-    document.getElementById('successTotalAmount').innerText = `฿${orderData.total.toLocaleString()}`;
-    document.getElementById('successCustName').innerText = customerData.customer_name;
-    document.getElementById('successCustAddress').innerText = `${customerData.shipping_address}, ${customerData.province} ${customerData.postal_code}`;
+    const ordNum = orderData.order_number || '-';
+    const trkNum = orderData.tracking_number || '-';
+
+    document.getElementById('successOrderNumber').innerText = ordNum;
+    document.getElementById('successTrackingNumber').innerText = trkNum;
+    document.getElementById('successTotalAmount').innerText = `฿${(orderData.total || 0).toLocaleString()}`;
+    document.getElementById('successCustName').innerText = customerData.customer_name || '-';
+    document.getElementById('successCustAddress').innerText = `${customerData.shipping_address || ''}, ${customerData.province || ''} ${customerData.postal_code || ''}`;
+
+    const trackNowBtn = document.getElementById('successTrackNowBtn');
+    if (trackNowBtn) {
+        trackNowBtn.onclick = () => {
+            closeOrderSuccessModal();
+            openOrderTrackingModal(ordNum);
+        };
+    }
 
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -1371,112 +1631,381 @@ function closeOrderSuccessModal() {
     document.body.style.overflow = '';
 }
 
-// Order Tracking Function (Minimalist)
+// Order Tracking Function (VIP Luxury)
 async function trackOrderModal(orderRef) {
-    try {
-        const ref = orderRef || document.getElementById('trackOrderInput')?.value.trim();
-        if (!ref) {
-            showToast('กรุณากรอกหมายเลขคำสั่งซื้อ หรือเบอร์โทรศัพท์', 'warning');
-            return;
-        }
+    const input = document.getElementById('trackOrderInput');
+    const ref = (orderRef || input?.value || '').trim();
+    if (!ref) {
+        showToast('กรุณากรอกหมายเลขคำสั่งซื้อ เบอร์โทร หรือเลขพัสดุ', 'warning');
+        if (input) input.focus();
+        return;
+    }
+
+    if (input) input.value = ref;
+
+    const resultContainer = document.getElementById('trackingResultContainer');
+    if (!resultContainer) return;
+
+    // Show luxury loading state
+    resultContainer.innerHTML = `
+        <div class="py-12 text-center text-neutral-400">
+            <div class="w-10 h-10 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin mx-auto mb-3"></div>
+            <p class="text-xs tracking-wider uppercase font-light">กำลังค้นหาข้อมูลคำสั่งซื้อในระบบ VIP Concierge...</p>
+        </div>
+    `;
 
     let o = null;
+
+    // 1. Try server API
     try {
         const res = await fetch(`/api/orders/${encodeURIComponent(ref)}`);
         if (res.ok) {
             const data = await res.json();
-            if (data.success) o = data.order;
+            if (data.success && data.order) {
+                o = data.order;
+            }
         }
     } catch (err) {}
 
+    // 2. Fallback to localStorage forme_orders
     if (!o) {
-        const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
-        o = savedOrders.find(item => item.order_number === ref || item.customer_phone === ref || item.tracking_number === ref);
+        try {
+            const savedOrders = JSON.parse(localStorage.getItem('forme_orders') || '[]');
+            o = savedOrders.find(item => 
+                (item.order_number && item.order_number.toLowerCase() === ref.toLowerCase()) || 
+                (item.customer_phone && item.customer_phone.replace(/\D/g, '') === ref.replace(/\D/g, '')) || 
+                (item.tracking_number && item.tracking_number.toLowerCase() === ref.toLowerCase())
+            );
+        } catch (e) {}
     }
 
+    // 3. Fallback to DEFAULT_DEMO_ORDERS
     if (!o) {
-        showToast('ไม่พบข้อมูลคำสั่งซื้อ กรุณาตรวจสอบรหัสหรือเบอร์โทร', 'error');
+        o = DEFAULT_DEMO_ORDERS.find(item => 
+            (item.order_number && item.order_number.toLowerCase() === ref.toLowerCase()) || 
+            (item.customer_phone && item.customer_phone.replace(/\D/g, '') === ref.replace(/\D/g, '')) || 
+            (item.tracking_number && item.tracking_number.toLowerCase() === ref.toLowerCase())
+        );
+    }
+
+    // Handle Not Found
+    if (!o) {
+        resultContainer.innerHTML = `
+            <div class="p-6 rounded-2xl bg-neutral-50 border border-neutral-200/90 text-center">
+                <div class="w-12 h-12 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </div>
+                <h4 class="text-sm font-medium text-neutral-900 mb-1">ไม่พบข้อมูลคำสั่งซื้อ "${ref}"</h4>
+                <p class="text-xs text-neutral-500 font-light max-w-sm mx-auto mb-4">
+                    กรุณาตรวจสอบหมายเลขคำสั่งซื้อ (เช่น FRM-20261022-3023) หรือหมายเลขโทรศัพท์ที่ใช้สั่งซื้อ
+                </p>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button type="button" onclick="fillTrackingDemo('FRM-20261022-3023')" class="px-3.5 py-1.5 rounded-full bg-white border border-neutral-300 text-neutral-800 hover:border-black text-xs font-light transition shadow-sm">
+                        🚚 ลองค้นหา: ออเดอร์กำลังจัดส่ง
+                    </button>
+                    <button type="button" onclick="fillTrackingDemo('089-123-4567')" class="px-3.5 py-1.5 rounded-full bg-white border border-neutral-300 text-neutral-800 hover:border-black text-xs font-light transition shadow-sm">
+                        📞 ลองค้นหาด้วยเบอร์โทร: 089-123-4567
+                    </button>
+                </div>
+            </div>
+        `;
         return;
     }
-        const resultContainer = document.getElementById('trackingResultContainer');
-        if (!resultContainer) return;
 
-        let activeStep = 1;
-        if (o.order_status === 'preparing') activeStep = 2;
-        if (o.order_status === 'quality_check') activeStep = 3;
-        if (o.order_status === 'shipped') activeStep = 4;
-        if (o.order_status === 'delivered') activeStep = 5;
+    // Parse items if string
+    if (typeof o.items === 'string') {
+        try { o.items = JSON.parse(o.items); } catch (e) { o.items = []; }
+    }
+    if (!Array.isArray(o.items)) o.items = [];
 
-        resultContainer.innerHTML = `
-            <div class="mt-6 p-5 rounded-xl bg-neutral-50 border border-neutral-200">
-                <div class="flex justify-between items-start mb-4 border-b border-neutral-200 pb-3">
+    // Map Active Step (1 to 5)
+    let activeStep = 1;
+    if (o.order_status === 'preparing') activeStep = 2;
+    if (o.order_status === 'quality_check') activeStep = 3;
+    if (o.order_status === 'shipped') activeStep = 4;
+    if (o.order_status === 'delivered') activeStep = 5;
+
+    const badgeInfo = getOrderStatusBadge(o.order_status);
+    const orderCreatedAt = o.created_at || '2026-10-22T10:00:00Z';
+    const carrierName = o.carrier || (o.tracking_number && o.tracking_number.startsWith('THP') ? 'ไปรษณีย์ไทย EMS (ประกันภัยอัญมณีแท้)' : 'Kerry Express VIP Delivery');
+    const trackingCode = o.tracking_number || 'THP220044256TH';
+
+    // 5 Milestones Data
+    const milestones = [
+        {
+            step: 1,
+            title: 'ยืนยันคำสั่งซื้อ & ชำระเงิน',
+            subtitle: 'Order Confirmed',
+            desc: 'ระบบยืนยันยอดชำระเงินและบันทึกข้อมูลคำสั่งซื้อเข้าระบบความปลอดภัยของ FORME เรียบร้อย',
+            icon: 'fa-file-invoice-dollar',
+            time: formatOrderDate(orderCreatedAt)
+        },
+        {
+            step: 2,
+            title: 'คัดสรรอัญมณี & สลักชื่อเลเซอร์',
+            subtitle: 'Crafting & Engraving',
+            desc: o.items.some(it => it.engraving) 
+                ? 'ช่างทองคัดสรรเพชรแท้/พลอยแท้ และสลักเลเซอร์ข้อความพิเศษตามที่ท่านระบุ' 
+                : 'ช่างฝีมือคัดสรรอัญมณีแท้คุณภาพสูงสุดและขึ้นรูปตัวเรือนทองคำ 18K',
+            icon: 'fa-gem',
+            time: calculateMilestoneTime(orderCreatedAt, 4)
+        },
+        {
+            step: 3,
+            title: 'ตรวจสอบคุณภาพมาตรฐาน GIA & QC',
+            subtitle: 'GIA Quality Inspection',
+            desc: 'นักอัญมณีศาสตร์ตรวจสอบความสมบูรณ์และบรรจุลงในกล่องกำมะหยี่หรูหราพร้อมใบรับรอง',
+            icon: 'fa-certificate',
+            time: calculateMilestoneTime(orderCreatedAt, 10)
+        },
+        {
+            step: 4,
+            title: 'ส่งมอบบริษัทขนส่งพัสดุหุ้มเกราะ',
+            subtitle: 'In Transit / Dispatched',
+            desc: `ส่งมอบ ${carrierName} พร้อมวงเงินประกันภัยคุ้มครองสินค้าเต็มจำนวน 100%`,
+            icon: 'fa-truck-fast',
+            time: calculateMilestoneTime(orderCreatedAt, 22)
+        },
+        {
+            step: 5,
+            title: 'จัดส่งสำเร็จถึงปลายทาง',
+            subtitle: 'Delivered Safely',
+            desc: 'พัสดุถึงที่อยู่ปลายทางเรียบร้อย พร้อมเซ็นรับมอบต่อเจ้าหน้าที่นำส่ง',
+            icon: 'fa-house-circle-check',
+            time: calculateMilestoneTime(orderCreatedAt, 48)
+        }
+    ];
+
+    // Status description note
+    let statusNotice = '';
+    if (activeStep === 5) {
+        statusNotice = `<span class="text-emerald-700 font-medium"><i class="fa-solid fa-circle-check mr-1"></i> พัสดุถูกจัดส่งและเซ็นรับมอบเรียบร้อยแล้ว ขอบพระคุณที่ไว้วางใจ FORME Fine Jewelry</span>`;
+    } else if (activeStep === 4) {
+        statusNotice = `<span class="text-indigo-700 font-medium"><i class="fa-solid fa-truck-fast mr-1"></i> พัสดุอยู่ระหว่างนำส่ง คาดว่าจะได้รับภายใน 1-2 วันทำการ (ประกันภัยครอบคลุม 100%)</span>`;
+    } else if (activeStep === 3) {
+        statusNotice = `<span class="text-sky-700 font-medium"><i class="fa-solid fa-microscope mr-1"></i> อยู่ระหว่างตรวจสอบอัญมณีและออกใบรับรอง GIA เพื่อความมั่นใจในมาตรฐานสูงสุด</span>`;
+    } else if (activeStep === 2) {
+        statusNotice = `<span class="text-amber-700 font-medium"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> ช่างฝีมือผู้เชี่ยวชาญกำลังจัดเตรียมชิ้นงานและสลักชื่อเลเซอร์ด้วยความประณีต</span>`;
+    } else {
+        statusNotice = `<span class="text-neutral-700 font-medium"><i class="fa-solid fa-clock mr-1"></i> รับคำสั่งซื้อเรียบร้อย กำลังส่งต่อฝ่ายผลิตและคัดสรรเพชรแท้</span>`;
+    }
+
+    resultContainer.innerHTML = `
+        <div class="space-y-4 animate-fade-in text-left">
+            
+            <!-- 1. Header Overview Card -->
+            <div class="p-5 rounded-2xl bg-neutral-50 border border-neutral-200/90 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-200/70">
                     <div>
-                        <span class="text-[11px] text-neutral-400 font-medium uppercase tracking-widest">หมายเลขคำสั่งซื้อ</span>
-                        <h4 class="text-base font-semibold text-neutral-900">${o.order_number}</h4>
-                        <p class="text-xs text-neutral-500">เลขพัสดุ: <span class="text-neutral-800 font-mono font-medium">${o.tracking_number}</span></p>
+                        <span class="text-[10px] text-neutral-400 uppercase tracking-widest block font-light">หมายเลขคำสั่งซื้อ (Order No.)</span>
+                        <h4 class="text-lg font-semibold font-mono text-neutral-900 tracking-tight">${o.order_number}</h4>
+                        <p class="text-[11px] text-neutral-500 mt-0.5 font-light">วันที่สั่งซื้อ: ${formatOrderDate(orderCreatedAt)}</p>
                     </div>
-                    <div class="text-right">
-                        <span class="text-xs text-neutral-500">ยอดชำระ</span>
-                        <p class="text-base font-semibold text-neutral-900 font-serif-luxury">฿${o.total.toLocaleString()}</p>
-                        <span class="text-[10px] px-2 py-0.5 rounded ${o.payment_status === 'paid' ? 'bg-emerald-100 text-emerald-800' : 'bg-neutral-200 text-neutral-800'}">
-                            ${o.payment_status === 'paid' ? 'ชำระเงินเรียบร้อย' : 'รอชำระเงิน'}
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${badgeInfo.bg} ${badgeInfo.text} text-xs font-medium border border-black/5 shadow-sm">
+                            <span class="w-2 h-2 rounded-full ${badgeInfo.dot} animate-pulse"></span>
+                            <span>${badgeInfo.label}</span>
                         </span>
                     </div>
                 </div>
 
-                <!-- 5-Step Timeline Minimal -->
-                <div class="py-4">
-                    <div class="relative flex justify-between">
-                        <div class="absolute top-1/2 left-0 right-0 h-0.5 bg-neutral-200 -translate-y-1/2 z-0"></div>
-                        <div class="absolute top-1/2 left-0 h-0.5 bg-neutral-900 -translate-y-1/2 z-0 transition-all duration-500" style="width: ${((activeStep - 1) / 4) * 100}%"></div>
-                        
-                        ${[
-                            { step: 1, title: 'รับคำสั่งซื้อ' },
-                            { step: 2, title: 'เตรียมสินค้า' },
-                            { step: 3, title: 'ตรวจ GIA' },
-                            { step: 4, title: 'จัดส่งพัสดุ' },
-                            { step: 5, title: 'จัดส่งสำเร็จ' }
-                        ].map(st => `
-                            <div class="relative z-10 flex flex-col items-center">
-                                <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] ${st.step <= activeStep ? 'bg-neutral-900 text-white font-bold' : 'bg-neutral-200 text-neutral-400'}">
-                                    ${st.step}
-                                </div>
-                                <span class="text-[10px] mt-1.5 ${st.step <= activeStep ? 'text-neutral-900 font-medium' : 'text-neutral-400'}">${st.title}</span>
-                            </div>
-                        `).join('')}
+                <div class="pt-3 text-xs font-light">
+                    ${statusNotice}
+                </div>
+            </div>
+
+            <!-- 2. Carrier & Live Tracking Box -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-neutral-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center text-amber-300 text-xl flex-shrink-0">
+                        <i class="fa-solid fa-truck-shield"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] uppercase tracking-widest text-neutral-400">ขนส่งด่วนพิเศษ</span>
+                            <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 font-medium">VIP 100% Insured</span>
+                        </div>
+                        <p class="text-xs font-medium text-white mt-0.5">${carrierName}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-[11px] text-neutral-400 font-light">เลขพัสดุ:</span>
+                            <span class="font-mono text-xs text-amber-200 tracking-wider font-semibold">${trackingCode}</span>
+                        </div>
                     </div>
                 </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <button type="button" onclick="copyTrackingCode('${trackingCode}')" 
+                        class="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-light transition flex items-center justify-center gap-1.5 border border-white/10">
+                        <i class="fa-regular fa-copy text-[11px]"></i>
+                        <span>คัดลอกเลขพัสดุ</span>
+                    </button>
+                    <a href="https://track.thailandpost.co.th/?trackNumber=${encodeURIComponent(trackingCode)}" target="_blank" rel="noopener noreferrer" 
+                        class="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white text-neutral-900 hover:bg-neutral-100 text-xs font-medium transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        <span>เช็คเว็บขนส่ง</span>
+                    </a>
+                </div>
+            </div>
 
-                <!-- Items -->
-                <div class="mt-4 pt-3 border-t border-neutral-200">
-                    <h5 class="text-[11px] font-medium text-neutral-400 uppercase tracking-widest mb-2">รายการสินค้า</h5>
-                    <div class="space-y-2">
-                        ${o.items.map(item => `
-                            <div class="flex items-center gap-3 text-xs text-neutral-700">
-                                <img src="${item.image_url}" class="w-9 h-9 rounded object-cover bg-neutral-100">
-                                <div class="flex-1">
-                                    <p class="font-medium text-neutral-900">${item.name}</p>
-                                    <p class="text-[11px] text-neutral-400">จำนวน: ${item.qty} ${item.size ? `| ไซส์: ${item.size}` : ''} ${item.engraving ? `| สลัก: "${item.engraving}"` : ''}</p>
+            <!-- 3. Vertical Milestone Timeline -->
+            <div class="p-5 sm:p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm">
+                <h5 class="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-5 flex items-center gap-2">
+                    <i class="fa-solid fa-timeline text-neutral-400"></i>
+                    <span>ลำดับขั้นตอนการจัดส่งสินค้า (Milestones)</span>
+                </h5>
+
+                <div class="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-neutral-200">
+                    ${milestones.map((m) => {
+                        const isDone = m.step < activeStep;
+                        const isCurrent = m.step === activeStep;
+                        const isFuture = m.step > activeStep;
+
+                        let circleClass = 'bg-neutral-100 text-neutral-400 border border-neutral-300';
+                        let iconHtml = `<span class="text-[10px] font-mono">${m.step}</span>`;
+
+                        if (isDone) {
+                            circleClass = 'bg-neutral-900 text-white shadow-sm';
+                            iconHtml = `<i class="fa-solid fa-check text-[11px]"></i>`;
+                        } else if (isCurrent) {
+                            circleClass = 'bg-neutral-900 text-white ring-4 ring-neutral-200 shadow-md';
+                            iconHtml = `<i class="fa-solid ${m.icon} text-[11px] animate-pulse"></i>`;
+                        }
+
+                        return `
+                            <div class="relative flex items-start gap-4">
+                                <!-- Circle Node -->
+                                <div class="absolute -left-[24px] top-0.5 w-6 h-6 rounded-full flex items-center justify-center ${circleClass} transition-all z-10">
+                                    ${iconHtml}
                                 </div>
-                                <span class="text-neutral-900 font-medium">฿${(item.price * item.qty).toLocaleString()}</span>
+
+                                <!-- Text Content -->
+                                <div class="flex-1">
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                        <div class="flex items-center gap-2">
+                                            <h6 class="text-xs font-medium ${isFuture ? 'text-neutral-400' : 'text-neutral-900'}">
+                                                ${m.title}
+                                            </h6>
+                                            ${isCurrent ? `<span class="px-2 py-0.2 rounded-full bg-amber-100 text-amber-800 text-[9px] font-medium">ขั้นตอนปัจจุบัน</span>` : ''}
+                                        </div>
+                                        <span class="text-[11px] ${isFuture ? 'text-neutral-400' : 'text-neutral-500'} font-light">
+                                            ${m.time}
+                                        </span>
+                                    </div>
+                                    <p class="text-[11px] ${isFuture ? 'text-neutral-400' : 'text-neutral-600'} mt-1 font-light leading-relaxed">
+                                        ${m.desc}
+                                    </p>
+                                </div>
                             </div>
-                        `).join('')}
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- 4. Shipping Address & Recipient Card -->
+            <div class="p-5 rounded-2xl bg-neutral-50 border border-neutral-200/90 text-xs font-light space-y-2">
+                <div class="flex items-center gap-2 text-neutral-900 font-medium mb-1">
+                    <i class="fa-solid fa-location-dot text-neutral-600"></i>
+                    <span>ข้อมูลผู้รับและการจัดส่ง</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-neutral-700">
+                    <div>
+                        <span class="text-[10px] text-neutral-400 uppercase tracking-wider block">ชื่อผู้รับ</span>
+                        <p class="font-medium text-neutral-900 mt-0.5">${o.customer_name || 'ลูกค้าผู้มีเกียรติ'}</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-neutral-400 uppercase tracking-wider block">เบอร์โทรศัพท์</span>
+                        <p class="font-mono text-neutral-900 mt-0.5">${o.customer_phone || '-'}</p>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <span class="text-[10px] text-neutral-400 uppercase tracking-wider block">ที่อยู่ปลายทาง</span>
+                        <p class="text-neutral-800 mt-0.5">${o.shipping_address || ''} ${o.province || ''} ${o.postal_code || ''}</p>
                     </div>
                 </div>
             </div>
-        `;
 
-        const modal = document.getElementById('orderTrackingModal');
-        if (modal) modal.classList.remove('hidden');
-    } catch (err) {
-        showToast('เกิดข้อผิดพลาดในการค้นหาคำสั่งซื้อ', 'error');
-    }
+            <!-- 5. Items in this Order -->
+            <div class="p-5 rounded-2xl bg-white border border-neutral-200/90">
+                <h5 class="text-xs font-medium text-neutral-900 uppercase tracking-wider mb-3 flex items-center justify-between">
+                    <span>รายการจิวเวลรี่ในคำสั่งซื้อ (${o.items.length} รายการ)</span>
+                    <span class="text-[11px] text-neutral-400 font-light">รับประกันของแท้ 100%</span>
+                </h5>
+                <div class="divide-y divide-neutral-100">
+                    ${o.items.map(item => `
+                        <div class="py-3 flex items-center gap-3 text-xs first:pt-0 last:pb-0">
+                            <img src="${item.image_url}" alt="${item.name}" 
+                                onerror="this.src='static/images/products/solitaire_ring.jpg'"
+                                class="w-12 h-12 rounded-xl object-cover bg-neutral-100 border border-neutral-200 flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-medium text-neutral-900 truncate">${item.name}</p>
+                                <div class="flex flex-wrap items-center gap-2 text-[11px] text-neutral-500 mt-0.5 font-light">
+                                    <span>จำนวน: ${item.qty} ชิ้น</span>
+                                    ${item.size ? `<span>• ไซส์: ${item.size}</span>` : ''}
+                                    ${item.engraving ? `<span class="text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200/50">• สลัก: "${item.engraving}"</span>` : ''}
+                                </div>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                <span class="font-serif-luxury font-medium text-neutral-900">฿${((item.price || 0) * (item.qty || 1)).toLocaleString()}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <!-- Financial Summary -->
+                <div class="mt-4 pt-4 border-t border-neutral-200/80 space-y-1.5 text-xs font-light">
+                    <div class="flex justify-between text-neutral-500">
+                        <span>ราคารวมสินค้า</span>
+                        <span>฿${(o.subtotal || o.total || 0).toLocaleString()}</span>
+                    </div>
+                    ${o.discount ? `
+                        <div class="flex justify-between text-emerald-700">
+                            <span>ส่วนลดคูปองพิเศษ</span>
+                            <span>-฿${o.discount.toLocaleString()}</span>
+                        </div>
+                    ` : ''}
+                    <div class="flex justify-between text-neutral-500">
+                        <span>ค่าจัดส่งพร้อมประกันภัย</span>
+                        <span class="text-emerald-700 font-medium">ฟรี (VIP Insured)</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-medium text-neutral-900 pt-2 border-t border-neutral-200">
+                        <span>ยอดชำระสุทธิ</span>
+                        <span class="font-serif-luxury text-base font-semibold">฿${(o.total || 0).toLocaleString()}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Footer Actions -->
+            <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <button type="button" onclick="window.print()" 
+                    class="flex-1 py-2.5 rounded-xl border border-neutral-300 hover:border-black text-neutral-800 text-xs font-light transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-print text-[11px]"></i>
+                    <span>พิมพ์ใบเสร็จและใบรับรอง</span>
+                </button>
+                <a href="https://line.me/ti/p/@forme.jewelry" target="_blank" 
+                    class="flex-1 py-2.5 rounded-xl bg-neutral-900 hover:bg-black text-white text-xs font-light transition flex items-center justify-center gap-1.5">
+                    <i class="fa-brands fa-line text-sm"></i>
+                    <span>สอบถามเพิ่มเติมผ่าน LINE VIP</span>
+                </a>
+            </div>
+
+        </div>
+    `;
 }
 
-function openOrderTrackingModal() {
+function openOrderTrackingModal(optionalOrderRef) {
     const modal = document.getElementById('orderTrackingModal');
-    if (modal) modal.classList.remove('hidden');
+    if (!modal) return;
+    modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+
+    const input = document.getElementById('trackOrderInput');
+    if (optionalOrderRef) {
+        if (input) input.value = optionalOrderRef;
+        trackOrderModal(optionalOrderRef);
+    } else {
+        renderRecentOrdersList();
+        if (input) {
+            setTimeout(() => input.focus(), 100);
+        }
+    }
 }
 
 function closeOrderTrackingModal() {
@@ -1592,6 +2121,16 @@ function setupEventListeners() {
             debounceTimer = setTimeout(() => {
                 handleSearch(e.target.value);
             }, 300);
+        });
+    }
+
+    const trackInput = document.getElementById('trackOrderInput');
+    if (trackInput) {
+        trackInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                trackOrderModal();
+            }
         });
     }
 
