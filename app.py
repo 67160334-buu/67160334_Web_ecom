@@ -3,8 +3,9 @@ import sys
 import json
 import sqlite3
 import random
+from functools import wraps
 from datetime import datetime
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, session
 
 if sys.platform.startswith('win'):
     try:
@@ -13,6 +14,38 @@ if sys.platform.startswith('win'):
         pass
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
+app.secret_key = os.environ.get('SECRET_KEY', 'forme_luxury_master_secret_2026')
+
+# --- ADMIN CREDENTIALS & AUTHENTICATION CONFIG ---
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'forme2026')
+ADMIN_TOKEN = os.environ.get('ADMIN_TOKEN', 'forme_token_2026_luxury_secure')
+
+def is_authenticated_admin():
+    """Checks if the incoming request is authenticated as an admin."""
+    if session.get('is_admin'):
+        return True
+    auth_header = request.headers.get('Authorization', '')
+    if auth_header.startswith('Bearer '):
+        token = auth_header.split('Bearer ')[1].strip()
+        if token == ADMIN_TOKEN:
+            return True
+    if request.headers.get('X-Admin-Token') == ADMIN_TOKEN:
+        return True
+    return False
+
+def admin_required(f):
+    """Decorator to protect admin-only endpoints."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not is_authenticated_admin():
+            return jsonify({
+                "success": False,
+                "error": "ต้องเข้าสู่ระบบในฐานะผู้ดูแลร้าน (Admin) ก่อนดำเนินการ"
+            }), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database.db')
 
 def get_db():
@@ -393,6 +426,11 @@ init_db()
 def home():
     return render_template('index.html')
 
+@app.route('/admin')
+@app.route('/admin.html')
+def admin_page():
+    return render_template('admin.html')
+
 # --- API ROUTES ---
 
 @app.route('/api/products', methods=['GET'])
@@ -509,6 +547,7 @@ def get_product_detail(product_id):
     return jsonify({"success": True, "product": item})
 
 @app.route('/api/products', methods=['POST'])
+@admin_required
 def add_product():
     data = request.json
     conn = get_db()
@@ -537,6 +576,7 @@ def add_product():
     return jsonify({"success": True, "product_id": new_id, "message": "Product created successfully"})
 
 @app.route('/api/products/<int:product_id>', methods=['DELETE'])
+@admin_required
 def delete_product(product_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -665,7 +705,44 @@ def get_order_by_ref(order_ref):
 
     return jsonify({"success": True, "order": order_data})
 
+# --- ADMIN AUTHENTICATION API ---
+
+@app.route('/api/admin/login', methods=['POST'])
+def admin_login():
+    data = request.json or {}
+    username = (data.get('username') or '').strip()
+    password = (data.get('password') or '').strip()
+
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        session['is_admin'] = True
+        return jsonify({
+            "success": True,
+            "message": "เข้าสู่ระบบผู้ดูแลสำเร็จ",
+            "token": ADMIN_TOKEN,
+            "username": ADMIN_USERNAME
+        })
+    return jsonify({
+        "success": False,
+        "error": "ชื่อผู้ใช้หรือรหัสผ่านผู้ดูแลไม่ถูกต้อง"
+    }), 401
+
+@app.route('/api/admin/logout', methods=['POST'])
+def admin_logout():
+    session.pop('is_admin', None)
+    return jsonify({"success": True, "message": "ออกจากระบบผู้ดูแลเรียบร้อย"})
+
+@app.route('/api/admin/check-auth', methods=['GET'])
+def admin_check_auth():
+    return jsonify({
+        "success": True,
+        "authenticated": is_authenticated_admin(),
+        "username": ADMIN_USERNAME if is_authenticated_admin() else None
+    })
+
+# --- PROTECTED ADMIN APIS ---
+
 @app.route('/api/admin/orders', methods=['GET'])
+@admin_required
 def get_all_orders():
     conn = get_db()
     cursor = conn.cursor()
@@ -682,10 +759,12 @@ def get_all_orders():
     return jsonify({"success": True, "orders": orders})
 
 @app.route('/api/admin/orders/<int:order_id>/status', methods=['PUT'])
+@admin_required
 def update_order_status(order_id):
-    data = request.json
+    data = request.json or {}
     new_status = data.get('status')
     new_payment = data.get('payment_status')
+    new_tracking = data.get('tracking_number')
     
     conn = get_db()
     cursor = conn.cursor()
@@ -693,11 +772,14 @@ def update_order_status(order_id):
         cursor.execute("UPDATE orders SET order_status = ? WHERE id = ?", (new_status, order_id))
     if new_payment:
         cursor.execute("UPDATE orders SET payment_status = ? WHERE id = ?", (new_payment, order_id))
+    if new_tracking:
+        cursor.execute("UPDATE orders SET tracking_number = ? WHERE id = ?", (new_tracking, order_id))
     conn.commit()
     conn.close()
     return jsonify({"success": True, "message": "อัปเดตสถานะคำสั่งซื้อเรียบร้อย"})
 
 @app.route('/api/admin/stats', methods=['GET'])
+@admin_required
 def get_admin_stats():
     conn = get_db()
     cursor = conn.cursor()
@@ -724,6 +806,63 @@ def get_admin_stats():
         "low_stock_products": low_stock,
         "order_status_counts": status_counts
     })
+
+@app.route('/api/admin/products/<int:prod_id>/stock', methods=['PUT'])
+@admin_required
+def update_product_stock(prod_id):
+    data = request.json or {}
+    delta = data.get('delta')
+    new_stock = data.get('stock')
+
+    conn = get_db()
+    cursor = conn.cursor()
+    if new_stock is not None:
+        cursor.execute("UPDATE products SET stock = MAX(0, ?) WHERE id = ?", (int(new_stock), prod_id))
+    elif delta is not None:
+        cursor.execute("UPDATE products SET stock = MAX(0, stock + ?) WHERE id = ?", (int(delta), prod_id))
+    conn.commit()
+    cursor.execute("SELECT stock FROM products WHERE id = ?", (prod_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return jsonify({"success": True, "stock": row['stock'] if row else 0})
+
+@app.route('/api/admin/coupons', methods=['GET'])
+@admin_required
+def list_admin_coupons():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM coupons ORDER BY id DESC")
+    coupons = [dict(c) for c in cursor.fetchall()]
+    conn.close()
+    return jsonify({"success": True, "coupons": coupons})
+
+@app.route('/api/admin/coupons', methods=['POST'])
+@admin_required
+def create_admin_coupon():
+    data = request.json or {}
+    code = (data.get('code') or '').strip().upper()
+    discount_type = data.get('discount_type', 'percentage')
+    discount_value = float(data.get('discount_value', 10))
+    min_spend = float(data.get('min_spend', 0))
+    description = data.get('description', '')
+
+    if not code:
+        return jsonify({"success": False, "error": "กรุณาระบุรหัสคูปอง"}), 400
+
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            INSERT INTO coupons (code, discount_type, discount_value, min_spend, description)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (code, discount_type, discount_value, min_spend, description))
+        conn.commit()
+        conn.close()
+        return jsonify({"success": True, "message": f"สร้างคูปอง {code} เรียบร้อยแล้ว"})
+    except sqlite3.IntegrityError:
+        conn.close()
+        return jsonify({"success": False, "error": f"รหัสคูปอง {code} มีอยู่ในระบบแล้ว"}), 400
+
 
 @app.route('/api/reviews', methods=['POST'])
 def add_review():

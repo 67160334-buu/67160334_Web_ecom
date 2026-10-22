@@ -76,11 +76,7 @@
                         <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 rounded-full bg-neutral-900 text-white text-[9px] font-medium flex items-center justify-center">0</span>
                     </button>
 
-                    <!-- Admin Mode Toggle -->
-                    <button onclick="openAdminDashboard()" class="ml-1 px-3 py-1.5 rounded-full border border-neutral-300 text-neutral-700 hover:border-black hover:text-black text-xs font-light transition">
-                        <i class="fa-solid fa-gear text-xs mr-1"></i>
-                        <span class="hidden md:inline">จัดการร้าน</span>
-                    </button>
+                    
                 </div>
             </div>
 
@@ -408,6 +404,8 @@
                     <span>Mastercard</span>
                     <span>•</span>
                     <span>ผ่อนชำระ 0% 10 เดือน</span>
+                    <span>•</span>
+                    <a href="admin.html" class="text-neutral-400 hover:text-neutral-900 transition underline underline-offset-2">เข้าสู่ระบบเจ้าหน้าที่ (Staff Portal)</a>
                 </div>
             </div>
         </div>
@@ -821,138 +819,6 @@
                 <p class="text-[11px] text-neutral-400 mt-4 text-center font-light">
                     * FORME มีบริการปรับแก้ขนาดแหวนฟรี 1 ครั้ง ภายใน 30 วัน
                 </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Backoffice Modal (Minimal) -->
-    <div id="adminDashboardModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="min-h-screen px-4 text-center flex items-center justify-center p-0">
-            <div onclick="closeAdminDashboard()" class="fixed inset-0 bg-black/40 backdrop-blur-sm"></div>
-            
-            <div class="relative bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 max-w-5xl w-full my-8 text-left shadow-xl z-10">
-                <div class="flex justify-between items-center mb-6 border-b border-neutral-100 pb-4">
-                    <div>
-                        <span class="text-[10px] text-neutral-400 font-light uppercase tracking-widest">Management</span>
-                        <h2 class="text-2xl font-serif text-neutral-900">ระบบจัดการร้าน FORME</h2>
-                    </div>
-                    <button onclick="closeAdminDashboard()" class="text-neutral-400 hover:text-black">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
-                </div>
-
-                <!-- KPIs Minimal -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
-                        <span class="text-[11px] text-neutral-500 font-light">ยอดขายรวม</span>
-                        <p class="text-lg font-medium text-neutral-900 mt-0.5 font-serif-luxury" id="adminStatRevenue">฿0</p>
-                    </div>
-                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
-                        <span class="text-[11px] text-neutral-500 font-light">คำสั่งซื้อทั้งหมด</span>
-                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatOrders">0</p>
-                    </div>
-                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
-                        <span class="text-[11px] text-neutral-500 font-light">สินค้าในระบบ</span>
-                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatProducts">0</p>
-                    </div>
-                    <div class="p-3.5 rounded-lg bg-neutral-50 border border-neutral-200">
-                        <span class="text-[11px] text-neutral-500 font-light">สต็อกเหลือน้อย</span>
-                        <p class="text-lg font-medium text-neutral-900 mt-0.5" id="adminStatLowStock">0</p>
-                    </div>
-                </div>
-
-                <!-- Admin Orders & New Product -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <h4 class="text-xs font-medium text-neutral-900 uppercase tracking-wider">คำสั่งซื้อล่าสุด</h4>
-                            <button onclick="loadAdminOrders()" class="text-xs text-neutral-500 hover:text-black underline">
-                                รีเฟรช
-                            </button>
-                        </div>
-
-                        <div class="overflow-x-auto rounded-lg border border-neutral-200">
-                            <table class="w-full text-xs text-left">
-                                <thead class="bg-neutral-50 text-neutral-500 font-light border-b border-neutral-200">
-                                    <tr>
-                                        <th class="py-2.5 px-3">เลขคำสั่งซื้อ</th>
-                                        <th class="py-2.5 px-3">ลูกค้า</th>
-                                        <th class="py-2.5 px-3">สินค้า</th>
-                                        <th class="py-2.5 px-3">ยอดเงิน</th>
-                                        <th class="py-2.5 px-3">สถานะ</th>
-                                        <th class="py-2.5 px-3 text-center">จัดการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminOrdersTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h4 class="text-xs font-medium text-neutral-900 uppercase tracking-wider">เพิ่มสินค้าใหม่</h4>
-                        
-                        <form id="newProductForm" onsubmit="submitNewProductForm(event)" class="p-4 rounded-lg bg-neutral-50 border border-neutral-200 space-y-2.5 text-xs">
-                            <div>
-                                <label class="text-neutral-600 block mb-1 font-light">ชื่อสินค้า *</label>
-                                <input type="text" id="newProdName" required placeholder="แหวนเพชร Halo 18K" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">หมวดหมู่</label>
-                                    <select id="newProdCategory" class="w-full bg-white border border-neutral-300 rounded px-2 py-1 text-neutral-900">
-                                        <option value="rings">แหวน</option>
-                                        <option value="necklaces">สร้อยคอ</option>
-                                        <option value="earrings">ต่างหู</option>
-                                        <option value="bracelets">กำไล</option>
-                                        <option value="bridal">เซ็ตวิวาห์</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">ราคา (฿) *</label>
-                                    <input type="number" id="newProdPrice" required placeholder="25000" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">ราคาเต็ม</label>
-                                    <input type="number" id="newProdOrigPrice" placeholder="29000" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                                </div>
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">สต็อก</label>
-                                    <input type="number" id="newProdStock" value="5" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">ตัวเรือน</label>
-                                    <input type="text" id="newProdMaterial" value="ทองคำขาว 18K" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                                </div>
-                                <div>
-                                    <label class="text-neutral-600 block mb-1 font-light">อัญมณี</label>
-                                    <input type="text" id="newProdGemstone" value="เพชรแท้ (GIA)" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="text-neutral-600 block mb-1 font-light">URL รูปภาพ *</label>
-                                <input type="url" id="newProdImage" required placeholder="https://..." class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                            </div>
-
-                            <div>
-                                <label class="text-neutral-600 block mb-1 font-light">Badge</label>
-                                <input type="text" id="newProdBadge" placeholder="สินค้าใหม่ / ขายดี" class="w-full bg-white border border-neutral-300 rounded px-2.5 py-1 text-neutral-900">
-                            </div>
-
-                            <button type="submit" class="w-full py-2 rounded-full bg-neutral-900 text-white text-xs hover:bg-black transition mt-1">
-                                + บันทึกสินค้า
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
