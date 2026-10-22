@@ -26,9 +26,16 @@
             <div class="flex-1 md:flex-none text-center">
                 จัดส่งฟรีทั่วประเทศเมื่อสั่งซื้อครบ 2,000.- | บริการสลักชื่อเลเซอร์ฟรี | โค้ดส่วนลด 10%: <strong class="text-neutral-900 cursor-pointer underline" onclick="navigator.clipboard.writeText('WELCOME10'); showToast('คัดลอกโค้ด WELCOME10 แล้ว', 'success');">WELCOME10</strong>
             </div>
-            <span class="hidden md:inline text-[11px] text-neutral-500">
-                LINE: @forme.jewelry
-            </span>
+            <div class="flex items-center gap-3">
+                <span class="hidden md:inline text-[11px] text-neutral-500">
+                    LINE: @forme.jewelry
+                </span>
+                <span class="text-neutral-300 hidden md:inline">|</span>
+                <a href="admin.html" class="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-800 hover:text-black py-0.5 px-2.5 rounded-full bg-neutral-100 hover:bg-neutral-200 transition">
+                    <i class="fa-solid fa-lock text-[9px]"></i>
+                    <span>เข้าระบบ Admin</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -38,7 +45,7 @@
             <div class="flex items-center justify-between h-20">
                 
                 <!-- Brand Logo (Minimal Editorial) -->
-                <a href="/" class="flex flex-col items-start group">
+                <a href="index.html" class="flex flex-col items-start group">
                     <span class="brand-title text-2xl sm:text-3xl font-light text-neutral-900 tracking-[0.28em] block leading-none">
                         FORME
                     </span>
@@ -75,6 +82,12 @@
                         <i class="fa-solid fa-bag-shopping text-base"></i>
                         <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 rounded-full bg-neutral-900 text-white text-[9px] font-medium flex items-center justify-center">0</span>
                     </button>
+
+                    <!-- Admin Portal Button (Header) -->
+                    <a href="admin.html" class="ml-1 sm:ml-2 px-3 py-1.5 rounded-full border border-neutral-300 bg-white text-neutral-800 hover:border-black hover:bg-neutral-900 hover:text-white text-xs font-light transition flex items-center gap-1.5 shadow-sm" title="ระบบจัดการหลังบ้านผู้ดูแล">
+                        <i class="fa-solid fa-lock text-[10px]"></i>
+                        <span class="hidden sm:inline font-medium">Admin Portal</span>
+                    </a>
 
                     
                 </div>
